@@ -5,8 +5,13 @@ from beartype import beartype
 
 @beartype
 def extract_text(fig: plt.Figure):
-    return set([t for t in get_text_decendents(fig)
-                if t.get_visible() and t.get_text() != ''])
+    return remove_empty(remove_invisible(set(get_text_decendents(fig))))
+
+def remove_invisible(text_set: set, /):
+    return {element for element in text_set if element.get_visible()}
+
+def remove_empty(text_set: set, /):
+    return {element for element in text_set if element.get_text() != ''}
 
 @beartype
 def get_text_decendents(artist: mpl.artist.Artist):
