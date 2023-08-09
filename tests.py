@@ -27,5 +27,12 @@ def test_get_text(make_simple_figure):
     assert result == expected
 
 def test_make_all_transparent(make_simple_figure):
-    notext_fig = mpltex.make_all_transparent(make_simple_figure[0])
-    assert mpltex.extract_text(notext_fig) == set()
+    mpltex.make_all_transparent(make_simple_figure[0])
+    assert mpltex.extract_text(make_simple_figure[0]) == set()
+
+def test_restore_colors(make_simple_figure):
+    initial_state = mpltex.extract_text(make_simple_figure[0])
+    removed_colors = mpltex.make_all_transparent(make_simple_figure[0])
+    mpltex.restore_colors(make_simple_figure[0], removed_colors)
+    final_state = mpltex.extract_text(make_simple_figure[0])
+    assert initial_state == final_state
