@@ -19,7 +19,8 @@ def remove_transparent(text_set: set, /):
 
 def make_all_transparent(fig: plt.Figure, /):
     for text in get_text_decendents(fig):
-        text.set_color("none")
+        text.set_color("none")  # avoids messing with the whitespace
+    return fig
 
 
 @beartype

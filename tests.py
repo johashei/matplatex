@@ -28,4 +28,4 @@ def test_get_text(make_simple_figure):
 
 def test_make_all_transparent(make_simple_figure):
     notext_fig = mpltex.make_all_transparent(make_simple_figure[0])
-    assert mpltex.extract_text(notext_fig) == {}
+    assert mpltex.extract_text(notext_fig) == set()
