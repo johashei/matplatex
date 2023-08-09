@@ -17,11 +17,19 @@ def remove_empty(text_set: set, /):
 def remove_transparent(text_set: set, /):
     return {element for element in text_set if element.get_color() != 'none'}
 
+@beartype
 def make_all_transparent(fig: plt.Figure, /):
+    removed_colors = {}
     for text in get_text_decendents(fig):
+        removed_colors[text] = text.get_color()
         text.set_color("none")  # avoids messing with the whitespace
-    return fig
+    return removed_colors
 
+@beartype
+def restore_colors(fig: plt.Figure, /, colors: dict):
+    pass
+    for text in get_text_decendents(fig):
+        text.set_color(colors[text])
 
 @beartype
 def get_text_decendents(artist: mpl.artist.Artist, /):
