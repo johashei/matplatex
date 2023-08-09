@@ -25,3 +25,8 @@ def test_get_text(make_simple_figure):
     result = mpltex.extract_text(make_simple_figure[0])
     expected = make_simple_figure[1]
     assert result == expected
+
+def test_remove_text(make_simple_figure):
+    result = mpltex.remove_text(make_simple_figure[0])
+    expected_removed = make_simple_figure[1]
+    assert expected_removed - result == expected_removed
