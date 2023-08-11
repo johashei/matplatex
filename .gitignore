@@ -1,0 +1,17 @@
+**/__pycache__/
+
+*.ipynb
+.ipynb_checkpoints
+.pytest_cache
+
+temp
+
+*.tex
+*.aux
+*.fls
+*.log
+*.syntex.gz
+*.fdb_latexmk
+
+*.pdf
+*.pdf_tex
