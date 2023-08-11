@@ -20,22 +20,36 @@ def write_tex(output: LaTeXinput, fig, *, graphics):
     output.includegraphics(graphics)
     for element in extract_text(fig):
         xy = get_position_in_figure(fig, element)
-        draw_anchors(fig, xy)
-        letters = element.get_text()
-        alignment = get_tikz_alignment(element)
-        rotation = element.get_rotation()
-        output.add_text(letters, xy, alignment, rotation)
+        draw_anchors(fig, xy) # useful for checking positioning
+        output.add_text(
+            element.get_text(),
+            position=xy,
+            anchor=get_tikz_anchor(element),
+            rotation=element.get_rotation())
 
 def get_position_in_figure(fig, mpl_text: mpl.text.Text):
     display_xy = mpl_text.get_transform().transform(mpl_text.get_position())
     figure_xy = fig.transFigure.inverted().transform(display_xy)
     return figure_xy
 
-def get_tikz_alignment(mpl_text):
-    mpl2tikz = {'bottom':'above', 'top':'below',
-                'right':'left', 'left':'right',
-                'center':'', 'baseline':'above', 'center_baseline':''}
-    return f"{mpl2tikz[mpl_text.get_va()]} {mpl2tikz[mpl_text.get_ha()]}"
+def get_tikz_anchor(mpl_text):
+    anchor_by_va = {
+        'bottom': 'south',
+        'top': 'north',
+        'center': '',
+        'baseline': 'base',
+        'center_baseline': 'mid'
+        }
+    anchor_by_ha = {
+        'right': 'east',
+        'left': 'west',
+        'center': ''
+        }
+    anchor = (f"{anchor_by_va[mpl_text.get_va()]} "
+              f"{anchor_by_ha[mpl_text.get_ha()]}")
+    if anchor == '':
+        anchor = 'center'
+    return anchor
 
 def determine_positioning(fig, mpl_text):
     fig.draw_without_renderning()
@@ -78,7 +92,6 @@ def get_text_decendents(artist: mpl.artist.Artist, /):
         try:
             child = next(stack[-1])
             if isinstance(child, mpl.text.Text):
-                print(child)
                 yield child
             else:
                 stack.append(iter(child.get_children()))
