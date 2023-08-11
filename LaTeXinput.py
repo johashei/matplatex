@@ -53,11 +53,11 @@ class LaTeXinput:
                 \includegraphics[scale=1]{{{graphics_filename}}}
                 }}
             \else%
-              \savebox{{{self.boxname}}}{{
+              \sbox{{{self.boxname}}}{{
                 \includegraphics[width={self.widthcommand}]{{{graphics_filename}}}
                 }}
             \fi%
-            \def\unitwidth{{\wd{self.boxname}}}
+            \def\unitwidth{{{self.widthcommand}}}
             \def\unitheight{{\ht{self.boxname}}}
 
             \hspace{{-\parindent}}
@@ -67,8 +67,12 @@ class LaTeXinput:
             """)
         self.open_graphics = True
 
-    def add_text(self, text, xy, alignment):
-        self.addline(rf"  \node [{alignment}] at ({xy[0]}, {xy[1]}) "
+    def add_text(self, text, position, *,
+                 alignment='', rotation=0, color='black', anchor='center'):
+        self.addline(rf"  \node [inner sep=0pt, {alignment}, {color}, "
+                     rf"rotate={rotation}, "
+                     rf"anchor={anchor}] "
+                     rf"at ({position[0]}, {position[1]}) "
                      rf"{{{text}}};")
 
     def endgraphics(self):
