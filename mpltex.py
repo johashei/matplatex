@@ -8,22 +8,23 @@ from LaTeXinput import LaTeXinput
 
 @beartype
 def save(fig: plt.Figure, /, filename: str):
-    mpl_text = extract_text(fig)
-    print(mpl_text)
-    colors = make_all_transparent(fig)
-    fig.savefig(f"{filename}.pdf", format='pdf')
-    restore_colors(fig, colors)
+    fig.draw_without_rendering() # Must draw text before it can be extracted.
     output = LaTeXinput()
     write_tex(output, fig, graphics=filename)
     output.write(f"{filename}.pdf_tex")
+    color_backup = make_all_transparent(fig)
+    fig.savefig(f"{filename}.pdf", format='pdf')
+    restore_colors(fig, color_backup)
 
 def write_tex(output: LaTeXinput, fig, *, graphics):
     output.includegraphics(graphics)
     for element in extract_text(fig):
         xy = get_position_in_figure(fig, element)
+        draw_anchors(fig, xy)
         letters = element.get_text()
         alignment = get_tikz_alignment(element)
-        output.add_text(letters, xy, alignment)
+        rotation = element.get_rotation()
+        output.add_text(letters, xy, alignment, rotation)
 
 def get_position_in_figure(fig, mpl_text: mpl.text.Text):
     display_xy = mpl_text.get_transform().transform(mpl_text.get_position())
@@ -33,8 +34,14 @@ def get_position_in_figure(fig, mpl_text: mpl.text.Text):
 def get_tikz_alignment(mpl_text):
     mpl2tikz = {'bottom':'above', 'top':'below',
                 'right':'left', 'left':'right',
-                'center':'', 'baseline':'', 'center_baseline':''}
+                'center':'', 'baseline':'above', 'center_baseline':''}
     return f"{mpl2tikz[mpl_text.get_va()]} {mpl2tikz[mpl_text.get_ha()]}"
+
+def determine_positioning(fig, mpl_text):
+    fig.draw_without_renderning()
+    mpl_text.get_window_extent()
+    return
+
 
 @beartype
 def extract_text(fig: plt.Figure, /):
@@ -56,11 +63,10 @@ def make_all_transparent(fig: plt.Figure, /):
     for text in get_text_decendents(fig):
         removed_colors[text] = text.get_color()
         text.set_color("none")  # avoids messing with the whitespace
-    print(removed_colors)
     return removed_colors
 
 @beartype
-def restore_colors(fig: plt.Figure, /, colors: dict):
+def restore_colors(fig: plt.Figure, colors: dict):
     pass
     for text in get_text_decendents(fig):
         text.set_color(colors[text])
@@ -72,10 +78,16 @@ def get_text_decendents(artist: mpl.artist.Artist, /):
         try:
             child = next(stack[-1])
             if isinstance(child, mpl.text.Text):
+                print(child)
                 yield child
             else:
                 stack.append(iter(child.get_children()))
         except StopIteration:
             stack.pop()
+
+def draw_anchors(fig, figure_xy):
+    ax = fig.get_children()[1]
+    ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False, transform=fig.transFigure,
+            zorder=20)
 
 
