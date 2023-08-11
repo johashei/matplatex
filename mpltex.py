@@ -1,3 +1,4 @@
+from functools import cached_property
 import sys
 
 import matplotlib as mpl
@@ -27,34 +28,71 @@ def write_tex(output: LaTeXinput, fig, *, graphics):
             anchor=get_tikz_anchor(element),
             rotation=element.get_rotation())
 
-def get_position_in_figure(fig, mpl_text: mpl.text.Text):
-    display_xy = mpl_text.get_transform().transform(mpl_text.get_position())
-    figure_xy = fig.transFigure.inverted().transform(display_xy)
-    return figure_xy
 
-def get_tikz_anchor(mpl_text):
-    anchor_by_va = {
-        'bottom': 'south',
-        'top': 'north',
-        'center': '',
-        'baseline': 'base',
-        'center_baseline': 'mid'
-        }
-    anchor_by_ha = {
-        'right': 'east',
-        'left': 'west',
-        'center': ''
-        }
-    anchor = (f"{anchor_by_va[mpl_text.get_va()]} "
-              f"{anchor_by_ha[mpl_text.get_ha()]}")
-    if anchor == '':
-        anchor = 'center'
-    return anchor
+class FigureText:
+    """Contain text and its tikz properties."""
+    def __init__(
+            self,
+            text: mpl.text.Text,
+            fig: plt.Figure,
+            ax: plt.Axes | None = None):
+        """Constructor for the FigureText class."""
+        self._mpl_text = text
+        self._figure_transform = fig.transFigure
+        self._ax = ax
 
-def determine_positioning(fig, mpl_text):
-    fig.draw_without_renderning()
-    mpl_text.get_window_extent()
-    return
+    @property
+    def text(self):
+        return self._mpl_text.get_text()
+
+    @property
+    def rotation(self):
+        return self._mpl_text.get_rotation()
+
+    @cached_property
+    def position_in_figure(self):
+        display_xy = self._mpl_text.get_transform().transform(
+            self._mpl_text.get_position())
+        figure_xy = self.figure_transform.inverted().transform(display_xy)
+        return figure_xy
+
+    @cached_property
+    def tikz_anchor(self):
+        anchor_by_va = {
+            'bottom': 'south',
+            'top': 'north',
+            'center': '',
+            'baseline': 'base',
+            'center_baseline': 'mid'
+            }
+        anchor_by_ha = {
+            'right': 'east',
+            'left': 'west',
+            'center': ''
+            }
+        anchor = (f"{anchor_by_va[self._mpl_text.get_va()]} "
+                  f"{anchor_by_ha[self._mpl_text.get_ha()]}")
+        if anchor == '':
+            anchor = 'center'
+        return anchor
+
+    @cached_property
+    def visible(self):
+        if not self._mpl_text.get_visible():
+            return False
+        elif self._ax is None or not self._mpl_text.get_clip_on():
+            return True
+        else:
+            return self._is_inside_ax()
+
+    def _is_inside_ax(self):
+        x, y = self._mpl_text.get_position()
+        xmin, xmax = self.ax.get_xlim()
+        ymin, ymax = self.ax.get_ylim()
+        if (xmin < x < xmax) and (ymin < y < ymax):
+            return True
+        else:
+            return False
 
 
 @beartype
