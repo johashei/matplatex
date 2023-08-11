@@ -1,6 +1,8 @@
 **/__pycache__/
 .DS_Store
 
+/env
+
 *.ipynb
 .ipynb_checkpoints
 .pytest_cache
