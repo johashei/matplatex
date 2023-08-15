@@ -13,7 +13,7 @@ temp
 *.aux
 *.fls
 *.log
-*.syntex.gz
+*.gz
 *.fdb_latexmk
 
 *.pdf
