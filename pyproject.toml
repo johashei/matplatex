@@ -4,17 +4,34 @@ build-backend = "hatchling.build"
 
 [project]
 name = "matplatex"
-version = 0.2.0
+dynamic = ["version"]
 authors = [
 	{ name="Johannes Sørby Heines", email=j.s.heines@pm.me" },
 ]
 description = "A package to save matplotlib figures for easy inclusion in LaTeX."
 readme = "README.md"
 requires-python = ">3.10"
+licence = "MIT"
 classifiers = [
-	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3.10",
 	"Licence :: OSI Approved :: MIT Licence",
 	"Operating System :: OS Independent",
+	"Development Status :: 4 - Beta",
+	"Intended Audience :: Science/Research",
+	"Topic :: Multimedia :: Graphics :: Graphics Conversion",
+	"Topic :: Science/Engineering::Visualization",
+	"Topic :: Text Processing :: Markup :: LaTeX",
+]
+keywords = [
+	"LaTeX",
+	"pdf_tex",
+	"matplotlib",
+]
+dependencies = [
+	"matplotlib>=3.5",
+	"beartype",
+	"pytest",
 ]
 
-
+[tool.hatch.version]
+path = "src/matplatex/__about__.py"
