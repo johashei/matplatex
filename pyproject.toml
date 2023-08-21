@@ -13,7 +13,7 @@ readme = "README.md"
 requires-python = ">3.8"
 licence = "MIT"
 classifiers = [
-	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.8",
 	"License :: OSI Approved :: MIT License",
 	"Operating System :: OS Independent",
 	"Development Status :: 4 - Beta",
@@ -34,6 +34,15 @@ dependencies = [
 
 [tool.hatch.version]
 path = "src/matplatex/__about__.py"
+
+[tool.hatch.build.target.sdist]
+exclude = [
+	"/.github",
+	"/doc",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/matplatex"]
 
 [tool.hatch.envs.test]
 python = "3.8"
