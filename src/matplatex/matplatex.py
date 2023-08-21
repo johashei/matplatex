@@ -1,9 +1,13 @@
-import sys
-
 import matplotlib.pyplot as plt
 from beartype import beartype
 
 from LaTeXinput import LaTeXinput
+
+class Foo:
+    def __init__(self):
+        pass
+    def __str__(self):
+        return ("Instance of Class Foo")
 
 @beartype
 def save(fig: plt.Figure, /, filename: str):
@@ -99,7 +103,7 @@ def get_text_decendents(artist: plt.Artist, /):
 
 def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
-    ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False, transform=fig.transFigure,
-            zorder=20)
+    ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False,
+            transform=fig.transFigure, zorder=20)
 
 
