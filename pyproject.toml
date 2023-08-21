@@ -41,6 +41,10 @@ dependencies = [
 	"pytest",
 ]
 
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
 
 [tool.hatch.envs.test.scripts]
 run = "pytest"
