@@ -1,5 +1,5 @@
 import pytest
-import matplatex
+import matplatex.tools as tools
 
 import matplotlib.pyplot as plt
 
@@ -22,17 +22,17 @@ def make_simple_figure():
 
 
 def test_get_text(make_simple_figure):
-    result = matplatex.extract_text(make_simple_figure[0])
+    result = tools.extract_text(make_simple_figure[0])
     expected = make_simple_figure[1]
     assert result == expected
 
 def test_make_all_transparent(make_simple_figure):
-    matplatex.make_all_transparent(make_simple_figure[0])
-    assert matplatex.extract_text(make_simple_figure[0]) == set()
+    tools.make_all_transparent(make_simple_figure[0])
+    assert tools.extract_text(make_simple_figure[0]) == set()
 
 def test_restore_colors(make_simple_figure):
-    initial_state = matplatex.extract_text(make_simple_figure[0])
-    removed_colors = matplatex.make_all_transparent(make_simple_figure[0])
-    matplatex.restore_colors(make_simple_figure[0], removed_colors)
-    final_state = matplatex.extract_text(make_simple_figure[0])
+    initial_state = tools.extract_text(make_simple_figure[0])
+    removed_colors = tools.make_all_transparent(make_simple_figure[0])
+    tools.restore_colors(make_simple_figure[0], removed_colors)
+    final_state = tools.extract_text(make_simple_figure[0])
     assert initial_state == final_state

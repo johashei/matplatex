@@ -1,23 +1,7 @@
 import matplotlib.pyplot as plt
 from beartype import beartype
 
-from LaTeXinput import LaTeXinput
-
-class Foo:
-    def __init__(self):
-        pass
-    def __str__(self):
-        return ("Instance of Class Foo")
-
-@beartype
-def save(fig: plt.Figure, /, filename: str):
-    fig.draw_without_rendering() # Must draw text before it can be extracted.
-    output = LaTeXinput()
-    write_tex(output, fig, graphics=filename)
-    output.write(f"{filename}.pdf_tex")
-    color_backup = make_all_transparent(fig)
-    fig.savefig(f"{filename}.pdf", format='pdf')
-    restore_colors(fig, color_backup)
+from .latex_input import LaTeXinput
 
 def write_tex(output: LaTeXinput, fig, *, graphics):
     output.includegraphics(graphics)
