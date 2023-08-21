@@ -1,6 +1,5 @@
 import sys
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from beartype import beartype
 
@@ -27,7 +26,7 @@ def write_tex(output: LaTeXinput, fig, *, graphics):
             anchor=get_tikz_anchor(element),
             rotation=element.get_rotation())
 
-def get_position_in_figure(fig, mpl_text: mpl.text.Text):
+def get_position_in_figure(fig, mpl_text: plt.Text):
     display_xy = mpl_text.get_transform().transform(mpl_text.get_position())
     figure_xy = fig.transFigure.inverted().transform(display_xy)
     return figure_xy
@@ -86,12 +85,12 @@ def restore_colors(fig: plt.Figure, colors: dict):
         text.set_color(colors[text])
 
 @beartype
-def get_text_decendents(artist: mpl.artist.Artist, /):
+def get_text_decendents(artist: plt.Artist, /):
     stack = [iter(artist.get_children())]
     while stack:
         try:
             child = next(stack[-1])
-            if isinstance(child, mpl.text.Text):
+            if isinstance(child, plt.Text):
                 yield child
             else:
                 stack.append(iter(child.get_children()))
