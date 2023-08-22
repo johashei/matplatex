@@ -1,4 +1,4 @@
-import mpltex
+import matplatex
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,7 +16,7 @@ def main():
     ax.annotate('$\mathcal{C}$', (0.5,0.5), xycoords='figure fraction')
     ax.annotate('$\mathcal{I}$', (1,1), xycoords='figure fraction')
 
-    mpltex.save(fig, "./example")
+    matplatex.save(fig, "./example")
     plt.savefig("example_expected.pdf", format='pdf')
 #    plt.show()
 
