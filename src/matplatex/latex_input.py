@@ -7,6 +7,25 @@ def as_latex_command(string: str, /):
     return '\\' + string.strip('\\')
 
 class LaTeXinput:
+    """Text to be input into a LaTeX document to include a figure.
+
+    Instance variables:
+    latexcode -- the text in question as a string
+    open_graphics -- track whether a figure environment is currently
+        open in latexcode
+    boxname -- name of the box defined in the LaTeX preamble which
+        will be used to size the figure.
+    widthcommand -- the LaTeX length command which will be used to
+        define the width of the figure.
+
+    Public methods:
+    __init__ -- constructor
+    includegraphics -- open a figure environment and include a figure
+    add_text -- draw a text box
+    endgraphics -- close a figure environment
+    addline -- add a single line of code to latexcode
+    write -- write latexcode to a file
+    """
 
     translatex = str.maketrans('\N{MINUS SIGN}', '-')
 
