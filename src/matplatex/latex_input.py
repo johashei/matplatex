@@ -7,10 +7,7 @@ class LaTeXinput:
 
     translatex = str.maketrans('\N{MINUS SIGN}', '-')
 
-    def __init__(
-            self, *,
-            boxname: str = r'\figurebox',
-            widthcommand: str = r'\figurewidth'):
+    def __init__(self, *, boxname: str, widthcommand: str):
         """Constructor for the LaTeXinput class.
 
         Keyword only arguments:
