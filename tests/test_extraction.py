@@ -1,5 +1,5 @@
 import pytest
-import mpltex
+import matplatex.tools as tools
 
 import matplotlib.pyplot as plt
 
@@ -22,21 +22,21 @@ def make_simple_figure():
 
 def test_get_text(make_simple_figure):
     result = {text._mpl_text for text in
-              mpltex.extract_text(make_simple_figure[0])}
+              tools.extract_text(make_simple_figure[0])}
     expected = make_simple_figure[1]
     assert result == expected
 
 def test_make_all_transparent(make_simple_figure):
-    mpltex.make_all_transparent(make_simple_figure[0])
-    assert mpltex.extract_text(make_simple_figure[0]) == set()
+    tools.make_all_transparent(make_simple_figure[0])
+    assert tools.extract_text(make_simple_figure[0]) == set()
 
 def test_restore_colors(make_simple_figure):
     initial_state = {t._mpl_text for t in
-                     mpltex.extract_text(make_simple_figure[0])}
-    removed_colors = mpltex.make_all_transparent(make_simple_figure[0])
-    mpltex.restore_colors(make_simple_figure[0], removed_colors)
+                     tools.extract_text(make_simple_figure[0])}
+    removed_colors = tools.make_all_transparent(make_simple_figure[0])
+    tools.restore_colors(make_simple_figure[0], removed_colors)
     final_state = {t._mpl_text for t in
-                   mpltex.extract_text(make_simple_figure[0])}
+                   tools.extract_text(make_simple_figure[0])}
     assert initial_state == final_state
 
 @pytest.fixture
@@ -46,7 +46,7 @@ def text_only_figure():
     return fig
 
 def test_get_position_in_figure(text_only_figure):
-    text = mpltex.extract_text(text_only_figure)
+    text = tools.extract_text(text_only_figure)
     result = text.pop().get_position_in_figure()
     expected = (0.42, 0.2845)
     tolerance = 1e-4
@@ -66,7 +66,7 @@ def test_is_inside_ax(figure_with_clipped_text):
     expected_by_text = {
         'text inside axes': True,
         'text outside axes': False}
-    for text in mpltex.extract_text(figure_with_clipped_text):
+    for text in tools.extract_text(figure_with_clipped_text):
         result = text._is_inside_ax()
         expected = expected_by_text[text.get_text()]
 
@@ -83,7 +83,7 @@ def test_ax_identification(figure_with_multiple_axes):
         'figure text': None,
         'ax1 text': figure_with_multiple_axes.get_axes()[0],
         'ax2 text': figure_with_multiple_axes.get_axes()[1]}
-    for text in mpltex.extract_text(figure_with_multiple_axes):
+    for text in tools.extract_text(figure_with_multiple_axes):
         result = text._ax
         expected = expected_by_text[text.get_text()]
         assert result == expected

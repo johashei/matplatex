@@ -1,21 +1,9 @@
 from functools import cached_property
-import sys
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from beartype import beartype
 
-from LaTeXinput import LaTeXinput
-
-@beartype
-def save(fig: plt.Figure, /, filename: str):
-    fig.draw_without_rendering() # Must draw text before it can be extracted.
-    output = LaTeXinput()
-    write_tex(output, fig, graphics=filename)
-    output.write(f"{filename}.pdf_tex")
-    color_backup = make_all_transparent(fig)
-    fig.savefig(f"{filename}.pdf", format='pdf')
-    restore_colors(fig, color_backup)
+from .latex_input import LaTeXinput
 
 def write_tex(output: LaTeXinput, fig, *, graphics):
     output.includegraphics(graphics)
@@ -27,12 +15,11 @@ def write_tex(output: LaTeXinput, fig, *, graphics):
             anchor=element.get_tikz_anchor(),
             rotation=element.get_rotation())
 
-
 class FigureText:
     """Contain text and its tikz properties."""
     def __init__(
             self,
-            text: mpl.text.Text,
+            text: plt.Text,
             fig: plt.Figure,
             ax: plt.Axes | None):
         """Constructor for the FigureText class."""
@@ -157,7 +144,7 @@ def get_text_decendents(fig: plt.Figure, /):
     while stack:
         try:
             child = next(stack[-1])
-            if isinstance(child, mpl.text.Text):
+            if isinstance(child, plt.Text):
                 yield FigureText(text=child, fig=fig, ax=current_ax)
             else:
                 if isinstance(child, plt.Axes):
@@ -168,8 +155,8 @@ def get_text_decendents(fig: plt.Figure, /):
 
 def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
-    ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False, transform=fig.transFigure,
-            zorder=20)
+    ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False,
+            transform=fig.transFigure, zorder=20)
 
 def print_family_tree(mpl_object):
     stack = [iter(mpl_object.get_children())]
