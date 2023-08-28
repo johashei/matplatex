@@ -1,6 +1,8 @@
 **/__pycache__/
 .DS_Store
 
+/env
+
 *.ipynb
 .ipynb_checkpoints
 .pytest_cache
@@ -11,7 +13,7 @@ temp
 *.aux
 *.fls
 *.log
-*.syntex.gz
+*.gz
 *.fdb_latexmk
 
 *.pdf
