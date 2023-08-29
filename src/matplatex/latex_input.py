@@ -87,7 +87,7 @@ class LaTeXinput:
         self.open_graphics = True
 
     def add_text(self, text, position, *,
-                 alignment='', rotation=0, color='black', anchor='center'):
+                 rotation=0, color='black', anchor='center'):
         self.addline(rf"  \node [inner sep=0pt, {color}, "
                      rf"rotate={rotation}, "
                      rf"anchor={anchor}] "
