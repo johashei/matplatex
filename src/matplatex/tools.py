@@ -89,7 +89,7 @@ class FigureText:
             }
         anchor = (f"{anchor_by_va[self._mpl_text.get_va()]} "
                   f"{anchor_by_ha[self._mpl_text.get_ha()]}")
-        if anchor == '':
+        if anchor == ' ':
             anchor = 'center'
         return anchor
 

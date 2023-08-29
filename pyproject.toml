@@ -50,6 +50,14 @@ dependencies = [
 	"pytest",
 ]
 
+[tool.hatch.envs.edge]
+python = "3.11"
+dependencies = [
+	"seaborn",
+	"pandas",
+	"pytest",
+]
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",

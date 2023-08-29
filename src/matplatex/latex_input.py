@@ -88,7 +88,7 @@ class LaTeXinput:
 
     def add_text(self, text, position, *,
                  alignment='', rotation=0, color='black', anchor='center'):
-        self.addline(rf"  \node [inner sep=0pt, {alignment}, {color}, "
+        self.addline(rf"  \node [inner sep=0pt, {color}, "
                      rf"rotate={rotation}, "
                      rf"anchor={anchor}] "
                      rf"at ({position[0]}, {position[1]}) "
