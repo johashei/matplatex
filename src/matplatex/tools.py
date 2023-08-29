@@ -6,15 +6,17 @@ from beartype import beartype
 
 from .latex_input import LaTeXinput
 
-def write_tex(output: LaTeXinput, fig, *, graphics):
+def write_tex(output: LaTeXinput, fig, *, graphics, add_anchors=False):
     output.includegraphics(graphics)
     for element in extract_text(fig):
-        draw_anchors(fig, element.position_in_figure) # useful for checking positioning
+        if add_anchors:  # useful for checking positioning
+            draw_anchors(fig, element.position_in_figure)
         output.add_text(
             element.text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
             rotation=element.rotation)
+
 
 class FigureText:
     """Contain text and its tikz properties."""
