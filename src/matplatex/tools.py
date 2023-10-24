@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import Iterator
+from collections.abc import Iterator
 
 import matplotlib.pyplot as plt
 from beartype import beartype
