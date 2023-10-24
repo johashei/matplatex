@@ -4,6 +4,16 @@ MatpLaTeX lets you save a matplotlib `Figure` as a combination of a pdf file con
 
 ## Installation
 
+For the development version, clone this directory, cd into it and run
+```
+pip install .
+```
+
+### Requirements:
+- python >= 3.10 (If someone asks I may add support for earlier versions.)
+- matplotlib >= 3.5
+- beartype
+
 
 ## Basic Usage
 
