@@ -64,4 +64,4 @@ addopts = [
 ]
 
 [tool.hatch.envs.test.scripts]
-run = "pytest tests/"
+all = "pytest tests/"
