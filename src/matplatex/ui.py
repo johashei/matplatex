@@ -7,7 +7,7 @@ from .latex_input import LaTeXinput
 @beartype
 def save(figure: plt.Figure, filename: str, *,
          boxname: str = r"\figurebox", widthcommand: str = r"\figurewidth",
-         draw_anchors=False):
+         draw_anchors=False, verbose=True):
     """Save matplotlib Figure with text in a separate tex file.
 
     Arguments:
@@ -29,3 +29,5 @@ def save(figure: plt.Figure, filename: str, *,
     color_backup = make_all_transparent(figure)
     figure.savefig(f"{filename}.pdf", format='pdf')
     restore_colors(figure, color_backup)
+    if verbose:
+        print(f"Figure written to files {filename}.pdf_tex and {filename}.pdf")
