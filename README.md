@@ -37,6 +37,10 @@ LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expe
 
 If you don't like the commands `\figurebox` and `\figurewidth`, you can change them to something else by passing the keyword arguments 'boxname' or 'widthcommand' to `matplatex.save`.
 
+## Limitations
+
+- Characters which need to be escaped in LaTeX must also be escaped in the plot.
+
 
 ## Why not …
 
@@ -44,7 +48,7 @@ If you don't like the commands `\figurebox` and `\figurewidth`, you can change t
 You’d need to recreate every figure each time you make a change.
 
 ### … use tikzplotlib?
-Tikzplotlib is great for simple figures, but fails to accurately recreate more complex ones, or when there are too many data. I wrote matpLaTeX to cover a different usecase that tikzplotlib rather than competes with it.
+Tikzplotlib is great for simple figures, but fails to accurately recreate more complex ones, or ones with too much data. MatpLaTeX is meant to cover a different usecase that tikzplotlib rather than compete with it.
 
 ### … use pgfplots from the getgo?
 I like python.
