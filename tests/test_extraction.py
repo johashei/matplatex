@@ -21,7 +21,7 @@ def make_simple_figure():
     return fig, visible_text_objects
 
 def test_get_text(make_simple_figure):
-    result = {text._mpl_text for text in
+    result = {text.mpl_text for text in
               tools.extract_text(make_simple_figure[0])}
     expected = make_simple_figure[1]
     assert result == expected
@@ -31,11 +31,11 @@ def test_make_all_transparent(make_simple_figure):
     assert tools.extract_text(make_simple_figure[0]) == set()
 
 def test_restore_colors(make_simple_figure):
-    initial_state = {t._mpl_text for t in
+    initial_state = {t.mpl_text for t in
                      tools.extract_text(make_simple_figure[0])}
     removed_colors = tools.make_all_transparent(make_simple_figure[0])
     tools.restore_colors(make_simple_figure[0], removed_colors)
-    final_state = {t._mpl_text for t in
+    final_state = {t.mpl_text for t in
                    tools.extract_text(make_simple_figure[0])}
     assert initial_state == final_state
 
@@ -47,7 +47,7 @@ def text_only_figure():
 
 def test_get_position_in_figure(text_only_figure):
     text = tools.extract_text(text_only_figure)
-    result = text.pop().get_position_in_figure()
+    result = text.pop().position_in_figure
     expected = (0.42, 0.2845)
     tolerance = 1e-4
     assert abs(result[0] - expected[0]) < tolerance
@@ -68,7 +68,7 @@ def test_is_inside_ax(figure_with_clipped_text):
         'text outside axes': False}
     for text in tools.extract_text(figure_with_clipped_text):
         result = text._is_inside_ax()
-        expected = expected_by_text[text.get_text()]
+        expected = expected_by_text[text.text]
 
 @pytest.fixture
 def figure_with_multiple_axes():
@@ -85,5 +85,5 @@ def test_ax_identification(figure_with_multiple_axes):
         'ax2 text': figure_with_multiple_axes.get_axes()[1]}
     for text in tools.extract_text(figure_with_multiple_axes):
         result = text._ax
-        expected = expected_by_text[text.get_text()]
+        expected = expected_by_text[text.text]
         assert result == expected
