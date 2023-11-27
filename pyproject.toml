@@ -11,10 +11,10 @@ authors = [
 description = "A package to save matplotlib figures for easy inclusion in LaTeX."
 readme = "README.md"
 requires-python = ">=3.10"
-licence = "MIT"
+licence = "GPLv3+"
 classifiers = [
 	"Programming Language :: Python :: 3.10",
-	"License :: OSI Approved :: MIT License",
+	"License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
 	"Operating System :: OS Independent",
 	"Development Status :: 4 - Beta",
 	"Intended Audience :: Science/Research",
