@@ -4,9 +4,9 @@ MatpLaTeX lets you save a matplotlib `Figure` as a combination of a pdf file con
 
 ## Installation
 
-For the development version, clone this directory, cd into it and run
+The matplatex package is on PyPI and can be installed with
 ```
-pip install .
+pip install matplatex
 ```
 
 ### Requirements:

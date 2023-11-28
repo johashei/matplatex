@@ -32,6 +32,9 @@ dependencies = [
 	"beartype",
 ]
 
+[project.urls]
+GitHub = "https://github.com/johashei/matplatex"
+
 [tool.hatch.version]
 path = "src/matplatex/__about__.py"
 
