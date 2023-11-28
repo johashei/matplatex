@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "matplatex"
 dynamic = ["version"]
 authors = [
-	{ name="Johannes Sørby Heines", email="j.s.heines@pm.me" },
+	{ name="Johannes Sørby Heines", email="j.s.heines@protonmail.ch" },
 ]
 description = "A package to save matplotlib figures for easy inclusion in LaTeX."
 readme = "README.md"
