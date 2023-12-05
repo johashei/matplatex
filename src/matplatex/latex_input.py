@@ -110,10 +110,16 @@ class LaTeXinput:
         self.open_graphics = True
 
     def add_text(self, text, position, *,
-                 rotation=0, color='black', anchor='center'):
-        self.addline(rf"  \node [inner sep=0pt, {color}, "
+                 rotation=0, color=(0, 0, 0), alpha=1, anchor='center'):
+        if len(color)==4:
+            alpha = color[3]
+        self.addline(rf"  \node [inner sep=0pt, "
+                     rf"text={{rgb,1:red,{color[0]}; "
+                                  rf"green,{color[1]}; "
+                                  rf"blue,{color[2]}}}, "
                      rf"rotate={rotation}, "
-                     rf"anchor={anchor}] "
+                     rf"anchor={anchor}, "
+                     rf"opacity={alpha}] "
                      rf"at ({position[0]}, {position[1]}) "
                      rf"{{{text}}};")
 

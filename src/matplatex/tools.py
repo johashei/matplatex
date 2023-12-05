@@ -21,6 +21,7 @@ from functools import cached_property
 from collections.abc import Iterator
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 from beartype import beartype
 
 from .latex_input import LaTeXinput
@@ -34,7 +35,8 @@ def write_tex(output: LaTeXinput, fig, *, graphics, add_anchors=False):
             element.text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
-            rotation=element.rotation)
+            rotation=element.rotation,
+            color=element.color)
 
 
 class FigureText:
@@ -67,8 +69,8 @@ class FigureText:
         return self.mpl_text.get_rotation()
 
     @property
-    def color(self):
-        return self.mpl_text.get_color()
+    def color(self) -> tuple[float]:
+        return to_rgba(self.mpl_text.get_color())
 
     @color.setter
     def color(self, value, /):
@@ -138,7 +140,7 @@ def remove_empty(text_set: set, /):
     return {element for element in text_set if element.text != ''}
 
 def remove_transparent(text_set: set, /):
-    return {element for element in text_set if element.color != 'none'}
+    return {element for element in text_set if element.color[3] != 0}
 
 @beartype
 def make_all_transparent(fig: plt.Figure, /):
