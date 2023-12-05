@@ -2,6 +2,7 @@ import pytest
 import matplatex.tools as tools
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 
 @pytest.fixture
 def make_simple_figure():
@@ -42,7 +43,7 @@ def test_restore_colors(make_simple_figure):
 @pytest.fixture
 def text_only_figure():
     fig = plt.Figure()
-    fig.add_artist(plt.Text(0.42, 0.2845, 'text'))
+    fig.add_artist(plt.Text(0.42, 0.2845, 'text', color='goldenrod'))
     return fig
 
 def test_get_position_in_figure(text_only_figure):
@@ -52,6 +53,12 @@ def test_get_position_in_figure(text_only_figure):
     tolerance = 1e-4
     assert abs(result[0] - expected[0]) < tolerance
     assert abs(result[1] - expected[1]) < tolerance
+
+def test_get_color(text_only_figure):
+    text = tools.extract_text(text_only_figure)
+    result = text.pop().color
+    expected = to_rgba('goldenrod')
+    assert result == expected
 
 @pytest.fixture
 def figure_with_clipped_text():
