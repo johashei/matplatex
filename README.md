@@ -48,17 +48,10 @@ If you don't like the commands `\figurebox` and `\figurewidth`, you can change t
 You’d need to recreate every figure each time you make a change.
 
 ### … use tikzplotlib?
-Tikzplotlib is great for simple figures, but fails to accurately recreate more complex ones, or ones with too much data. MatpLaTeX is meant to cover a different usecase that tikzplotlib rather than compete with it.
+Tikzplotlib is great for simple figures, but fails to accurately recreate more complex ones, or ones with too much data. MatpLaTeX is meant to cover a different use case rather than compete with tikzplotlib.
 
 ### … use pgfplots from the getgo?
-I like python.
+If you analyse data in python you’re likely already making figures. It’s often convenient to use those figures directly in a LaTeX document.
 
 ### … spend time on actual work rather than on tiny details nobody cares about anyway?
 _I_ care.
-
-## Motivation
-You've probably been there: you made a nice figure and now you want no include it in your LaTeX document. But the text is too small. And the font doesn't match.
-
-You open the matplotlib documentation and adjust all the necessary settings for the figure to look right, perfectly at home in your manuscript.
-
-
