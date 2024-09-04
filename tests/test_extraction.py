@@ -1,7 +1,8 @@
+import matplotlib.pyplot as plt
 import pytest
+
 import matplatex.tools as tools
 
-import matplotlib.pyplot as plt
 
 @pytest.fixture
 def make_simple_figure():
@@ -41,7 +42,7 @@ def test_restore_colors(make_simple_figure):
 
 @pytest.fixture
 def text_only_figure():
-    fig = plt.Figure()
+    fig = plt.Figure(figsize=(10, 6))
     fig.add_artist(plt.Text(0.42, 0.2845, 'text'))
     return fig
 
@@ -52,6 +53,11 @@ def test_get_position_in_figure(text_only_figure):
     tolerance = 1e-4
     assert abs(result[0] - expected[0]) < tolerance
     assert abs(result[1] - expected[1]) < tolerance
+
+def test_get_height_to_width(text_only_figure):
+    result = tools.get_height_to_width(text_only_figure)
+    expected = 6/10
+    assert result == expected
 
 @pytest.fixture
 def figure_with_clipped_text():
@@ -69,6 +75,7 @@ def test_is_inside_ax(figure_with_clipped_text):
     for text in tools.extract_text(figure_with_clipped_text):
         result = text._is_inside_ax()
         expected = expected_by_text[text.text]
+        assert result == expected
 
 @pytest.fixture
 def figure_with_multiple_axes():
