@@ -1,8 +1,9 @@
-import pytest
-import matplatex.tools as tools
-
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_rgba
+import pytest
+
+import matplatex.tools as tools
+
 
 @pytest.fixture
 def make_simple_figure():
@@ -42,7 +43,7 @@ def test_restore_colors(make_simple_figure):
 
 @pytest.fixture
 def text_only_figure():
-    fig = plt.Figure()
+    fig = plt.Figure(figsize=(10, 6))
     fig.add_artist(plt.Text(0.42, 0.2845, 'text', color='goldenrod'))
     return fig
 
@@ -58,6 +59,11 @@ def test_get_color(text_only_figure):
     text = tools.extract_text(text_only_figure)
     result = text.pop().color
     expected = to_rgba('goldenrod')
+    assert result == expected
+
+def test_get_height_to_width(text_only_figure):
+    result = tools.get_height_to_width(text_only_figure)
+    expected = 6/10
     assert result == expected
 
 @pytest.fixture
@@ -76,6 +82,7 @@ def test_is_inside_ax(figure_with_clipped_text):
     for text in tools.extract_text(figure_with_clipped_text):
         result = text._is_inside_ax()
         expected = expected_by_text[text.text]
+        assert result == expected
 
 @pytest.fixture
 def figure_with_multiple_axes():

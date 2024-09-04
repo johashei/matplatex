@@ -31,26 +31,26 @@ class LaTeXinput:
     """Text to be input into a LaTeX document to include a figure.
 
     Instance variables:
-    latexcode -- the text in question as a string
-    open_graphics -- track whether a figure environment is currently
-        open in latexcode
-    boxname -- name of the box defined in the LaTeX preamble which
-        will be used to size the figure.
-    widthcommand -- the LaTeX length command which will be used to
-        define the width of the figure.
+    latexcode       The text in question as a string
+    open_graphics   Track whether a figure environment is currently
+                    open in latexcode
+    boxname         Name of the box defined in the LaTeX preamble which
+                    will be used to size the figure.
+    widthcommand    The LaTeX length command which will be used to
+                    define the width of the figure.
 
     Public methods:
-    __init__ -- constructor
-    includegraphics -- open a figure environment and include a figure
-    add_text -- draw a text box
-    endgraphics -- close a figure environment
-    addline -- add a single line of code to latexcode
-    write -- write latexcode to a file
+    __init__            Constructor.
+    includegraphics     Open a figure environment and include a figure.
+    add_text            Draw a text box.
+    endgraphics         Close a figure environment.
+    addline             Add a single line of code to latexcode.
+    write               Write latexcode to a file.
     """
 
     translatex = str.maketrans(invalid_latex)
 
-    def __init__(self, *, boxname: str, widthcommand: str):
+    def __init__(self, *, widthcommand: str):
         """Constructor for the LaTeXinput class.
 
         Keyword only arguments:
@@ -60,7 +60,6 @@ class LaTeXinput:
             define the width of the figure.
         """
         self.open_graphics = False
-        self.boxname = as_latex_command(boxname)
         self.widthcommand = as_latex_command(widthcommand)
 
         self.latexcode = trim(
@@ -70,42 +69,39 @@ class LaTeXinput:
             % Requires tikz
             %
             % Usage:
-            % Add "\newsavebox{self.boxname}" to your preamble, then include
-            % the figure with
             %
-            % \input{{<file name>.pdf_tex}}
+            % Requires the tikz package.
             %
-            % To scale the figure, write
+            % Set the desired with of the figure using
+            %   \setlength{{{self.widthcommand}}}{{<your desired width>}}
             %
-            % \def{self.widthcommand}{{<your desired width>}}
-            % \input{{<file name>.pdf_tex}}
+            % You may need to first define the length with
+            %   \newlength{{{self.widthcommand}}} (only necessary once)
             %
-            """)
+            % Include the figure with
+            %   \input{{<file name>.pdf_tex}}
+            % or
+            %   \import{{<path>}}{{<file name>.pdf_tex}}
+            %
+            %
+            """
+            )
 
-    def includegraphics(self, graphics_filename):
+    def includegraphics(self, graphics_filename, height_to_width: float):
         """ Start a tikzpicture and include the graphics."""
         if self.open_graphics:
             self.endgraphics()
         self.addline('')
         self.latexcode += trim(
-             rf"""\begingroup
+            rf"""\begingroup
 
-            \ifx{self.widthcommand}\undefined%
-              \savebox{{{self.boxname}}}{{
-                \includegraphics[scale=1]{{{graphics_filename}}}
-                }}
-            \else%
-              \sbox{{{self.boxname}}}{{
-                \includegraphics[width={self.widthcommand}]{{{graphics_filename}}}
-                }}
-            \fi%
-            \def\unitwidth{{{self.widthcommand}}}
-            \def\unitheight{{\ht{self.boxname}}}
+            \newlength{{\unitheight}}
+            \setlength{{\unitheight}}{{{height_to_width}{self.widthcommand}}}
 
             \hspace{{-\parindent}}
-            \begin{{tikzpicture}}[x=\unitwidth, y=\unitheight]
+            \begin{{tikzpicture}}[x={self.widthcommand}, y=\unitheight]
               \node[inner sep=0pt, above right] (graphics) at (0,0) {{
-                \includegraphics[width=\unitwidth]{{{graphics_filename}}}}};
+                \includegraphics[width={self.widthcommand}]{{{graphics_filename}}}}};
             """)
         self.open_graphics = True
 

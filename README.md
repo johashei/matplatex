@@ -1,19 +1,22 @@
 # MatpLaTeX
 
-MatpLaTeX lets you save a matplotlib `Figure` as a combination of a pdf file containing the graphics and a tex file containing the text. With this, text in the figure will automatically use the typeface, size and other settings of the surrounding text.
+MatpLaTeX lets you save a matplotlib `Figure` as a combination of a pdf file containing the graphics and a LaTeX file containing the text. With this, text in the figure will automatically use the typeface, size and other settings of the surrounding text.
 
 ## Installation
 
-The matplatex package is on PyPI and can be installed with
+MatpLaTeX is on PyPI, simply
 ```
 pip install matplatex
 ```
 
-### Requirements:
+### Python requirements:
 - python >= 3.10 (If someone asks I may add support for earlier versions.)
 - matplotlib >= 3.5
 - beartype
 
+### LaTeX requirements:
+- tikz
+- graphicx
 
 ## Basic Usage
 
@@ -22,36 +25,27 @@ To save a figure, simply use
 matplatex.save(fig, "myfig")
 ```
 this will create two files named `myfig.pdf` and `myfig.pdf_tex`.
-Add
+
+In your LaTeX document, define the width of the figure with
 ```
-\newsavebox\figurebox
-``` 
-to your LaTeX preamble and include the figure in your document with
+\newlength{\figurewidth}
+\setlength{\figurewidth}{<your desired width>}
 ```
-\def\figurewidth{<width>}}
+and include the figure as such:
+```
 \input{myfig.pdf_tex}
 ```
 LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expected way.
 
-## More Options
+## Options
 
-If you don't like the commands `\figurebox` and `\figurewidth`, you can change them to something else by passing the keyword arguments 'boxname' or 'widthcommand' to `matplatex.save`.
+_Note: this is still under development and may change in future versions._
 
-## Limitations
+`matplatex.save` accepts the following keyword options:
+- `widthcommand`: string  
+Command used to set the width of the figure. Default: `\figurewidth`.
+- `draw_anchors`: bool  
+Mark the text anchors in the figure. Useful for debugging. Default: `False`.
+- `verbose`: bool  
+Print message upon successful save. Default: `True`.
 
-- Characters which need to be escaped in LaTeX must also be escaped in the plot.
-
-
-## Why not …
-
-### … adjust the plot settings in a matplotlib style sheet?
-You’d need to recreate every figure each time you make a change.
-
-### … use tikzplotlib?
-Tikzplotlib is great for simple figures, but fails to accurately recreate more complex ones, or ones with too much data. MatpLaTeX is meant to cover a different use case rather than compete with tikzplotlib.
-
-### … use pgfplots from the getgo?
-If you analyse data in python you’re likely already making figures. It’s often convenient to use those figures directly in a LaTeX document.
-
-### … spend time on actual work rather than on tiny details nobody cares about anyway?
-_I_ care.

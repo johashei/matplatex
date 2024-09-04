@@ -27,7 +27,7 @@ from beartype import beartype
 from .latex_input import LaTeXinput
 
 def write_tex(output: LaTeXinput, fig, *, graphics, add_anchors=False):
-    output.includegraphics(graphics)
+    output.includegraphics(graphics, get_height_to_width(fig))
     for element in extract_text(fig):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
@@ -170,6 +170,11 @@ def get_text_decendents(fig: plt.Figure, /) -> Iterator[FigureText]:
                 stack.append(iter(child.get_children()))
         except StopIteration:
             stack.pop()
+
+@beartype
+def get_height_to_width(fig: plt.Figure) -> float:
+    width, height = fig.get_size_inches()
+    return height/width
 
 def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
