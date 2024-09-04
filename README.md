@@ -33,7 +33,7 @@ In your LaTeX document, define the width of the figure with
 ```
 and include the figure as such:
 ```
-\input{myfig.pdf.tex}
+\input{myfig.pdf_tex}
 ```
 LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expected way.
 
@@ -42,11 +42,11 @@ LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expe
 _Note: this is still under development and may change in future versions._
 
 `matplatex.save` accepts the following keyword options:
-- widthcommand: string  
+- `widthcommand`: string  
 Command used to set the width of the figure. Default: `\figurewidth`.
-- draw\_anchors: bool  
+- `draw_anchors`: bool  
 Mark the text anchors in the figure. Useful for debugging. Default: `False`.
-- verbose: bool  
+- `verbose`: bool  
 Print message upon successful save. Default: `True`.
 
 
