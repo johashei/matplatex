@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 
 from .__about__ import __version__
-from .character_replacements import invalid_latex
+from .string_replacements import invalid_latex
 
 
 def as_latex_command(string: str, /):
@@ -48,7 +48,8 @@ class LaTeXinput:
     write               Write latexcode to a file.
     """
 
-    translatex = str.maketrans(invalid_latex)
+    # only works for single characters
+    # translatex = str.maketrans(invalid_latex)
 
     def __init__(self, *, widthcommand: str):
         """Constructor for the LaTeXinput class.
@@ -131,9 +132,16 @@ class LaTeXinput:
         if self.open_graphics:
             self.endgraphics()
         self.addline(rf"\global\let{self.widthcommand}\undefined%")
-        self.latexcode.replace('  ', '\t')
+#        self.latexcode.replace('  ', '\t')
+        self.latexcode = replace_multiple(self.latexcode, invalid_latex)
         with open(filename, 'w') as outfile:
-            outfile.write(self.latexcode.translate(self.translatex))
+            outfile.write(self.latexcode)
+
+
+def replace_multiple(string: str, replacements: dict) -> str:
+    for key, val in replacements.items():
+        string = string.replace(key, val)
+    return string
 
 
 def trim(string):

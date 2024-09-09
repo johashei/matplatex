@@ -23,6 +23,7 @@ LATEX_TYPICAL = r"""
 
 @pytest.fixture
 def figure():
+    plt.rc('text', usetex=True)
     fig, [ax1, ax2] = plt.subplots(1, 2)
     x1 = [-1, -0.5, -0.3, -0.1, 0.1, 0.3, 0.5, 1]
     y11 = [x**3 for x in x1]  # no numpy to avoid superfluous dependencies
@@ -30,7 +31,7 @@ def figure():
     ax1.plot(x1, y11, 'o-', label='$x^3$')
     ax1.plot(x1, y12, 'd-', label='$x^2$')
     ax1.legend()
-    ax1.set_xlabel('x')
+    ax1.set_xlabel('x', usetex=False)
     ax1.set_ylabel('y')
     ax2.axhline(20)
     ax2.axhspan(0, 17)
