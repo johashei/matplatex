@@ -12,9 +12,11 @@ LATEX_TYPICAL = r"""
 \usepackage{graphicx}
 \usepackage{tikz}
 
+\newlength{\figurewidth}
+\newlength{\matplatextmp}
+
 \begin{document}
 
-\newlength{\figurewidth}
 \setlength{\figurewidth}{\linewidth}
 \input{figure.pdf_tex}
 

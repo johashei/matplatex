@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2023 Johannes Sørby Heines
+Copyright (C) 2024 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,11 +34,13 @@ def save(
         ):
     """Save matplotlib Figure with text in a separate tex file.
 
-    Arguments:
+    Arguments
+    ---------
     figure      The matplotlib Figure to save
     filename    The name to use for the files, without extention
 
-    Optional keyword arguments:
+    Optional keyword arguments
+    --------------------------
     widthcommand    The LaTeX length command which will be used to
                     define the width of the figure.
     draw_anchors    If True, mark the text anchors on the figure.
