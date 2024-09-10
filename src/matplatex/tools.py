@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 from collections.abc import Iterator
-from functools import cached_property
+from functools import cached_property, partial
 import sys
 
 import matplotlib.pyplot as plt
@@ -32,11 +32,9 @@ def write_tex(
         graphics, add_anchors=False, verbose=False
         ):
     output.includegraphics(graphics, get_height_to_width(fig))
-    for element in extract_text(fig):
+    for element in extract_text(fig, verbose):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
-        if verbose:
-            print(f"Adding {element}", end='\n', file=sys.stderr)
         output.add_text(
             element.text,
             position=element.position_in_figure,
@@ -134,9 +132,34 @@ class FigureText:
 
 
 @beartype
-def extract_text(fig: plt.Figure, /) -> set[FigureText]:
-    return remove_transparent(remove_empty(remove_invisible(
-        set(get_text_decendents(fig)))))
+def extract_text(fig: plt.Figure, /, verbose: bool = False) -> set[FigureText]:
+    if verbose:
+        return verbose_extract_text(fig)
+    else:
+        return remove_transparent(remove_empty(remove_invisible(
+            set(get_text_decendents(fig)))))
+
+@beartype
+def verbose_extract_text(fig: plt.Figure, /) -> set[FigureText]:
+    vprint = partial(print, end='\n', file=sys.stderr)
+    text = set(get_text_decendents(fig))
+    no_invisible = remove_invisible(text)
+    no_empty = remove_empty(no_invisible)
+    no_transparent = remove_transparent(no_empty)
+    vprint("Adding the following text elements:")
+    for element in no_transparent:
+        vprint(element)
+    vprint("\nThese text elements were removed:")
+    vprint("Transparent:")
+    for element in no_empty - no_transparent:
+        vprint(element)
+    vprint("Empty:")
+    for element in no_invisible - no_empty:
+        vprint(element)
+    vprint("Invisible:")
+    for element in text - no_invisible:
+        vprint(element)
+    return no_transparent
 
 def remove_invisible(text_set: set, /) -> set:
     return {element for element in text_set if element.visible}
