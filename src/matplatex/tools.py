@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from functools import cached_property
 from collections.abc import Iterator
+from functools import cached_property
+import sys
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_rgba
@@ -26,18 +27,22 @@ from beartype import beartype
 
 from .latex_input import LaTeXinput
 
-def write_tex(output: LaTeXinput, fig, *, graphics, add_anchors=False):
+def write_tex(
+        output: LaTeXinput, fig, *,
+        graphics, add_anchors=False, verbose=False
+        ):
     output.includegraphics(graphics, get_height_to_width(fig))
     for element in extract_text(fig):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
+        if verbose:
+            print(f"Adding {element}", end='\n', file=sys.stderr)
         output.add_text(
             element.text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
             rotation=element.rotation,
             color=element.color)
-
 
 class FigureText:
     """Contain text and its tikz properties."""
@@ -53,8 +58,8 @@ class FigureText:
 
     def __str__(self):
         return (
-            f"FigureText({self.mpl_text}, position={self._figure_xy}, "
-            f"visible={self._visible}, tikz_anchor={self._tikz_anchor})")
+            f"FigureText({self.mpl_text}, position={self.position_in_figure}, "
+            f"visible={self.visible}, tikz_anchor={self.tikz_anchor})")
 
     @property
     def text(self) -> str:
@@ -129,21 +134,21 @@ class FigureText:
 
 
 @beartype
-def extract_text(fig: plt.Figure, /):
+def extract_text(fig: plt.Figure, /) -> set[FigureText]:
     return remove_transparent(remove_empty(remove_invisible(
         set(get_text_decendents(fig)))))
 
-def remove_invisible(text_set: set, /):
+def remove_invisible(text_set: set, /) -> set:
     return {element for element in text_set if element.visible}
 
-def remove_empty(text_set: set, /):
+def remove_empty(text_set: set, /) -> set:
     return {element for element in text_set if element.text != ''}
 
-def remove_transparent(text_set: set, /):
+def remove_transparent(text_set: set, /) -> set:
     return {element for element in text_set if element.color[3] != 0}
 
 @beartype
-def make_all_transparent(fig: plt.Figure, /):
+def make_all_transparent(fig: plt.Figure, /) -> dict:
     removed_colors = {}
     for text in get_text_decendents(fig):
         removed_colors[text.mpl_text] = text.color

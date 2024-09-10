@@ -30,7 +30,7 @@ def save(
         *,
         widthcommand: str = r"\figurewidth",
         draw_anchors: bool = False,
-        verbose: bool = True
+        verbose: int = 1
         ):
     """Save matplotlib Figure with text in a separate tex file.
 
@@ -45,11 +45,19 @@ def save(
                     define the width of the figure.
     draw_anchors    If True, mark the text anchors on the figure.
                     Useful for debugging.
-    verbose: bool   Print save message.
+    verbose: int    0: Print nothing.
+                    1: Print save message to stdout. (default)
+                    2: Also print runtime info to stderr.
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
     output = LaTeXinput(widthcommand=widthcommand)
-    write_tex(output, figure, graphics=filename, add_anchors=draw_anchors)
+    write_tex(
+        output,
+        figure,
+        graphics=filename,
+        add_anchors=draw_anchors,
+        verbose=(verbose==2)
+        )
     output.write(f"{filename}.pdf_tex")
     color_backup = make_all_transparent(figure)
     figure.savefig(f"{filename}.pdf", format='pdf')

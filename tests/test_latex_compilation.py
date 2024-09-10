@@ -45,7 +45,7 @@ def test_compilation(figure, tmp_path):
     figure_path = tmp_path / 'figure'
     # Regenerate the files each time so changes are applied.
     latex_path.write_text(LATEX_TYPICAL, encoding='utf-8')
-    save(figure, str(figure_path))
+    save(figure, str(figure_path), verbose=2)
     # compile with pdflatex
     compilation = run(
         ['pdflatex', latex_path.name],

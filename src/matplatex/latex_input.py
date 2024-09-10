@@ -27,11 +27,9 @@ class LaTeXinput:
     """Text to be input into a LaTeX document to include a figure.
 
     Instance variables:
-    latexcode       The text in question as a string
-    open_graphics   Track whether a figure environment is currently
-                    open in latexcode
-    boxname         Name of the box defined in the LaTeX preamble which
-                    will be used to size the figure.
+    latexcode       The text in question as a string.
+    open_graphics   Tracks whether a figure environment is currently
+                    open in latexcode.
     widthcommand    The LaTeX length command which will be used to
                     define the width of the figure.
 
