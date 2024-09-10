@@ -125,6 +125,7 @@ class FigureText:
 
     def _is_inside_ax(self):
         x, y = self._axes_xy
+        # Why did I use or here? I'm remember there was a reason.
         if (0 <= x <= 1) or (0 <= y <= 1):
             return True
         else:

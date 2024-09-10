@@ -63,7 +63,7 @@ class LaTeXinput:
             "%",
             "% Usage:",
             "%",
-            "In the preamble, add",
+            "% In the preamble, add",
             rf"%   \newlength{{{self.widthcommand}}}",
             r"%   \newlength{\matplatextmp}",
             "%"
