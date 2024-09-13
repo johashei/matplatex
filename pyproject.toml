@@ -61,6 +61,13 @@ dependencies = [
 	"pytest",
 ]
 
+[tool.hatch.envs.doc]
+python = '3.12'
+dependencies = [
+	"sphinx",
+	"sphinx-rtd-theme",
+]
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",

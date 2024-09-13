@@ -2,6 +2,8 @@
 
 MatpLaTeX lets you save a matplotlib `Figure` as a combination of a pdf file containing the graphics and a LaTeX file containing the text. With this, text in the figure will automatically use the typeface, size and other settings of the surrounding text.
 
+*Warning: This package is still in development. Different versions are not backwards compatible.*
+
 ## Installation
 
 MatpLaTeX is on PyPI, simply
