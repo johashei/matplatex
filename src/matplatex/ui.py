@@ -51,10 +51,11 @@ def save(
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
     output = LaTeXinput(widthcommand=widthcommand)
+    filename_base = filename.rsplit('/')[-1]
     write_tex(
         output,
         figure,
-        graphics=filename,
+        graphics=filename_base,
         add_anchors=draw_anchors,
         verbose=(verbose==2)
         )
