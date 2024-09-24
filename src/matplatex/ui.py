@@ -35,21 +35,24 @@ def save(
         ):
     """Save matplotlib Figure with text in a separate tex file.
 
-    Arguments
-    ---------
-    figure      The matplotlib Figure to save
-    filename    The name to use for the files, without extention
+    :param figure: The matplotlib Figure to save
+    :type figure: matplotlib.figure.Figure
+    :param filename: The name to use for the files, without extention
+    :type filename: str
+    :param widthcommand:
+        The LaTeX length command which will be used to define the width
+        of the figure.
+    :type widthcommand: str
+    :param draw_anchors:
+        If True, mark the text anchors on the figure. Useful for debugging.
+    :type draw_anchors: bool
+    :param verbose: Set level of printed messages.
+        * 0: Print nothing.
+        * 1: Print save message to stdout. (default)
+        * 2: Also print runtime info to stderr.
+    :type verbose: int
 
-    Optional keyword arguments
-    --------------------------
-    widthcommand    The LaTeX length command which will be used to
-                    define the width of the figure.
-    draw_anchors    If True, mark the text anchors on the figure.
-                    Useful for debugging.
-    externalize     Set to True if you want to use tikz externalization.
-    verbose: int    0: Print nothing.
-                    1: Print save message to stdout. (default)
-                    2: Also print runtime info to stderr.
+    :rtype: None
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
     figure.set_layout_engine('none') # Don't change the figure after this.
