@@ -12,7 +12,42 @@ matpLaTeX documentation
 
    This project is still in development. Different versions may not be compatible.
 
+Basic usage
+-----------
+
+Saving a figure:
+
+.. code-block:: python
+
+   import matplotlib.pyplot as plt
+   import matplatex
+
+   fig = plt.figure()
+   # Add stuff to the figure.
+
+   matplatex.save(fig, 'myprettyfig')
+
+Using the saved figure in LaTeX:
+
+.. code-block:: latex
+
+   % Preamble
+   \usepackage{tikz}
+   \newlength{\figurewidth}
+   \newlength{\matplatextmp}
+
+   % ...
+
+   % Document body
+   \setlength{\figurewidth}{.8\linewidth}
+   \input{myprettyfig.pdf_tex}
+
+It's that simple! Check the :doc:`usage` section for more options.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   usage
+   api
 

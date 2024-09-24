@@ -101,7 +101,7 @@ class FigureText:
 
     @cached_property
     def visible(self) -> bool:
-        if not self.mpl_text.get_visible():
+        if not self.mpl_text.get_visible(): # explicitly invisible
             return False
         elif self._ax is None or not self.mpl_text.get_clip_on():
             return True

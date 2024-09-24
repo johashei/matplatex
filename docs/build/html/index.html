@@ -20,7 +20,8 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,11 +43,12 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">matpLaTeX documentation</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -78,19 +80,62 @@
 <p class="admonition-title">Note</p>
 <p>This project is still in development. Different versions may not be compatible.</p>
 </div>
-<div class="toctree-wrapper compound">
+<section id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h2>
+<p>Saving a figure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplatex</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="c1"># Add stuff to the figure.</span>
+
+<span class="n">matplatex</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;myprettyfig&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>Using the saved figure in LaTeX:</p>
+<div class="highlight-latex notranslate"><div class="highlight"><pre><span></span><span class="c">% Preamble</span>
+<span class="k">\usepackage</span><span class="nb">{</span>tikz<span class="nb">}</span>
+<span class="k">\newlength</span><span class="nb">{</span><span class="k">\figurewidth</span><span class="nb">}</span>
+<span class="k">\newlength</span><span class="nb">{</span><span class="k">\matplatextmp</span><span class="nb">}</span>
+
+<span class="c">% ...</span>
+
+<span class="c">% Document body</span>
+<span class="k">\setlength</span><span class="nb">{</span><span class="k">\figurewidth</span><span class="nb">}{</span>.8<span class="k">\linewidth</span><span class="nb">}</span>
+<span class="k">\input</span><span class="nb">{</span>myprettyfig.pdf<span class="nb">_</span>tex<span class="nb">}</span>
+</pre></div>
+</div>
+<p>It’s that simple! Check the <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> section for more options.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#saving-a-figure">Saving a figure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-a-saved-figure-in-latex">Using a saved figure in LaTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#user-facing-method">User facing method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#implementation">Implementation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, J. S. Heines.</p>
+    <p>&#169; Copyright 2024, Johannes Sørby Heines.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
