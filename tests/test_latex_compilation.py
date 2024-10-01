@@ -6,7 +6,7 @@ import pytest
 
 from matplatex import save
 
-LATEX_TYPICAL = r"""
+LATEX_MWE = r"""
 \documentclass{article}
 
 \usepackage{graphicx}
@@ -40,15 +40,19 @@ def figure():
     ax2.plot([0, 3, 4, 7], [15, 11, 7, 3], '--')
     return fig
 
-def test_compilation(figure, tmp_path):
+@pytest.fixture
+def latex_source(figure, tmp_path):
     latex_path = tmp_path / 'document.tex'
     figure_path = tmp_path / 'figure'
     # Regenerate the files each time so changes are applied.
-    latex_path.write_text(LATEX_TYPICAL, encoding='utf-8')
+    latex_path.write_text(LATEX_MWE, encoding='utf-8')
     save(figure, str(figure_path), verbose=2)
+    return {'dir': tmp_path, 'file': latex_path.name}
+
+def test_compilation(latex_source):
     # compile with pdflatex
     compilation = run(
-        ['pdflatex', latex_path.name],
-        cwd=tmp_path
+        ['pdflatex', latex_source['file']],
+        cwd=latex_source['dir']
         )
     assert compilation.returncode == 0
