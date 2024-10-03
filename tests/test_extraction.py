@@ -93,7 +93,6 @@ def test_is_inside_ax(figure_with_clipped_text):
         expected = expected_by_text[text.text]
         assert result == expected
 
-
 @pytest.fixture
 def figure_with_multiple_axes():
     fig, [ax1, ax2] = plt.subplots(1,2)
