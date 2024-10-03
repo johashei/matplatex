@@ -65,6 +65,9 @@ dependencies = [
 addopts = [
     "--import-mode=importlib",
 ]
+markers = [
+    "select_latex"
+]
 
 [tool.hatch.envs.test.scripts]
 all = "pytest tests/"
