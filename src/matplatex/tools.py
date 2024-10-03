@@ -57,7 +57,9 @@ class FigureText:
     def __str__(self):
         return (
             f"FigureText({self.mpl_text}, position={self.position_in_figure}, "
-            f"visible={self.visible}, tikz_anchor={self.tikz_anchor})")
+            f"visible={self.visible}, tikz_anchor={self.tikz_anchor}), "
+            f"ax={self._ax}"
+            )
 
     @property
     def text(self) -> str:
@@ -209,19 +211,3 @@ def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
     ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False,
             transform=fig.transFigure, zorder=20)
-
-def print_family_tree(mpl_object):
-    stack = [iter(mpl_object.get_children())]
-    print(stack)
-    indent = ""
-    while stack:
-        try:
-            child = next(stack[-1])
-            print(f"{indent}{child}")
-            stack.append(iter(child.get_children()))
-            indent = indent[:-2]
-            indent += "  |- "
-        except StopIteration:
-            indent = indent[:-5]
-            indent += "- "
-            stack.pop()
