@@ -1,3 +1,5 @@
+from types import NoneType
+
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_rgba
 import pytest
@@ -68,7 +70,8 @@ def test_get_height_to_width(text_only_figure):
 
 @pytest.fixture
 def figure_with_clipped_text():
-    fig, ax = plt.subplots()
+    fig = plt.figure()
+    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
     ax.set_xticks([])
     ax.set_yticks([])
     ax.add_artist(plt.Text( 0.7, 0.2, 'text inside axes'))
@@ -83,6 +86,18 @@ def test_is_inside_ax(figure_with_clipped_text):
         result = text._is_inside_ax()
         expected = expected_by_text[text.text]
         assert result == expected
+
+def _test_ax_assignment(figure_with_clipped_text):
+    expected_type_by_text = {
+        'text inside axes': plt.Axes,
+        'text outside axes': plt.Axes,
+        'text inside but not tied to axes': NoneType,
+        'text outside and not tied to axes': NoneType}
+    for text in tools.extract_text(figure_with_clipped_text):
+        result = text._ax
+        expected_type = expected_type_by_text[text.text]
+        assert isinstance(result, expected_type)
+
 
 @pytest.fixture
 def figure_with_multiple_axes():
