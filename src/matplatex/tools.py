@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 from collections.abc import Iterator
-from functools import cached_property
+from functools import cached_property, partial
 import sys
 
 import matplotlib.pyplot as plt
@@ -32,11 +32,9 @@ def write_tex(
         graphics, add_anchors=False, verbose=False
         ):
     output.includegraphics(graphics, get_height_to_width(fig))
-    for element in extract_text(fig):
+    for element in extract_text(fig, verbose):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
-        if verbose:
-            print(f"Adding {element}", end='\n', file=sys.stderr)
         output.add_text(
             element.text,
             position=element.position_in_figure,
@@ -59,7 +57,9 @@ class FigureText:
     def __str__(self):
         return (
             f"FigureText({self.mpl_text}, position={self.position_in_figure}, "
-            f"visible={self.visible}, tikz_anchor={self.tikz_anchor})")
+            f"visible={self.visible}, tikz_anchor={self.tikz_anchor}), "
+            f"ax={self._ax}"
+            )
 
     @property
     def text(self) -> str:
@@ -127,6 +127,7 @@ class FigureText:
 
     def _is_inside_ax(self):
         x, y = self._axes_xy
+        # Why did I use or here? I'm remember there was a reason.
         if (0 <= x <= 1) or (0 <= y <= 1):
             return True
         else:
@@ -134,9 +135,34 @@ class FigureText:
 
 
 @beartype
-def extract_text(fig: plt.Figure, /) -> set[FigureText]:
-    return remove_transparent(remove_empty(remove_invisible(
-        set(get_text_decendents(fig)))))
+def extract_text(fig: plt.Figure, /, verbose: bool = False) -> set[FigureText]:
+    if verbose:
+        return verbose_extract_text(fig)
+    else:
+        return remove_transparent(remove_empty(remove_invisible(
+            set(get_text_decendents(fig)))))
+
+@beartype
+def verbose_extract_text(fig: plt.Figure, /) -> set[FigureText]:
+    vprint = partial(print, end='\n', file=sys.stderr)
+    text = set(get_text_decendents(fig))
+    no_invisible = remove_invisible(text)
+    no_empty = remove_empty(no_invisible)
+    no_transparent = remove_transparent(no_empty)
+    vprint("Adding the following text elements:")
+    for element in no_transparent:
+        vprint(element)
+    vprint("\nThese text elements were removed:")
+    vprint("Transparent:")
+    for element in no_empty - no_transparent:
+        vprint(element)
+    vprint("Empty:")
+    for element in no_invisible - no_empty:
+        vprint(element)
+    vprint("Invisible:")
+    for element in text - no_invisible:
+        vprint(element)
+    return no_transparent
 
 def remove_invisible(text_set: set, /) -> set:
     return {element for element in text_set if element.visible}
@@ -163,17 +189,21 @@ def restore_colors(fig: plt.Figure, colors: dict):
 @beartype
 def get_text_decendents(fig: plt.Figure, /) -> Iterator[FigureText]:
     stack = [iter(fig.get_children())]
-    current_ax = None
+    current_ax = [None]
     while stack:
         try:
             child = next(stack[-1])
             if isinstance(child, plt.Text):
-                yield FigureText(text=child, fig=fig, ax=current_ax)
+                yield FigureText(text=child, fig=fig, ax=current_ax[-1])
             else:
                 if isinstance(child, plt.Axes):
-                    current_ax = child
+                    current_ax.append(child)
+                else:
+                    current_ax.append(current_ax[-1]) # Still in the same Axes
                 stack.append(iter(child.get_children()))
         except StopIteration:
+            if current_ax[-1] != None:
+                current_ax.pop()
             stack.pop()
 
 @beartype
@@ -185,19 +215,3 @@ def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
     ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False,
             transform=fig.transFigure, zorder=20)
-
-def print_family_tree(mpl_object):
-    stack = [iter(mpl_object.get_children())]
-    print(stack)
-    indent = ""
-    while stack:
-        try:
-            child = next(stack[-1])
-            print(f"{indent}{child}")
-            stack.append(iter(child.get_children()))
-            indent = indent[:-2]
-            indent += "  |- "
-        except StopIteration:
-            indent = indent[:-5]
-            indent += "- "
-            stack.pop()
