@@ -10,7 +10,7 @@ MWE = r"""
 \begin{document}
 
 \setlength{\figurewidth}{\linewidth}
-\input{figure.pdf_tex}
+\input{figure.tex}
 
 \end{document}
 """
@@ -27,7 +27,7 @@ TIKZEXTERNALIZE = r"""
 \begin{document}
 
 \setlength{\figurewidth}{\linewidth}
-\input{figure.pdf_tex}
+\input{figure.tex}
 
 \end{document}
 """

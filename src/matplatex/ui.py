@@ -57,16 +57,16 @@ def save(
     write_tex(
         output,
         figure,
-        graphics=filename_base,
+        graphics=f'{filename_base}_gfx',
         add_anchors=draw_anchors,
         verbose=(verbose==2)
         )
-    output.write(f"{filename}.pdf_tex")
+    output.write(f"{filename}.tex")
     color_backup = make_all_transparent(figure)
-    figure.savefig(f"{filename}.pdf", format='pdf')
+    figure.savefig(f"{filename}_gfx.pdf", format='pdf')
     restore_colors(figure, color_backup)
     if verbose:
-        print(f"Figure written to files {filename}.pdf_tex and {filename}.pdf")
+        print(f"Figure written to files {filename}.tex and {filename}_gfx.pdf")
 
 
 def print_family_tree(mpl_object):

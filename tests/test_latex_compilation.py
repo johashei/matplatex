@@ -42,7 +42,7 @@ def test_compilation(latex_source):
     # Several asserts here because they are ordered.
     if latex_source['ext']: # requires first compiling figures
         figure_compilation = run(
-            ['pdflatex', '--jobname=figure_xt', latex_source['file']],
+            ['pdflatex', '--jobname=figure_gfx_xt', latex_source['file']],
             cwd=latex_source['dir']
             )
         assert figure_compilation.returncode == 0
