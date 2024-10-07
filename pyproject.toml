@@ -70,4 +70,4 @@ markers = [
 ]
 
 [tool.hatch.envs.test.scripts]
-all = "pytest tests/"
+all = "pytest --verbose tests/"

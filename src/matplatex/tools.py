@@ -189,17 +189,21 @@ def restore_colors(fig: plt.Figure, colors: dict):
 @beartype
 def get_text_decendents(fig: plt.Figure, /) -> Iterator[FigureText]:
     stack = [iter(fig.get_children())]
-    current_ax = None
+    current_ax = [None]
     while stack:
         try:
             child = next(stack[-1])
             if isinstance(child, plt.Text):
-                yield FigureText(text=child, fig=fig, ax=current_ax)
+                yield FigureText(text=child, fig=fig, ax=current_ax[-1])
             else:
                 if isinstance(child, plt.Axes):
-                    current_ax = child
+                    current_ax.append(child)
+                else:
+                    current_ax.append(current_ax[-1]) # Still in the same Axes
                 stack.append(iter(child.get_children()))
         except StopIteration:
+            if current_ax[-1] != None:
+                current_ax.pop()
             stack.pop()
 
 @beartype

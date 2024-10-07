@@ -11,22 +11,26 @@ import matplatex.tools as tools
 def make_simple_figure():
     """Make a figure with a single subplot and unique text objects."""
     fig, ax = plt.subplots()
-    ax.plot([0,2], [1,0])
+    l, = ax.plot([0,2], [1,0], label='label')
     ax.set_xlabel("x axis label")
     ax.set_ylabel("y axis label")
     ax.set_title("axis title")
     ax.set_xticks([0, 1, 2], ['none', 'I', 'II'])
     ax.set_yticks([0, 1/3, 2/3, 1], ['0', '1/3', '2/3', '1'])
+    legend = ax.legend(handles=[l])
     visible_text_objects = set(
         [ax.title, ax.xaxis.label, ax.yaxis.label]
         + ax.get_xticklabels()
         + ax.get_yticklabels()
+        + legend.get_texts()
         )
+    print(legend.get_texts()[0].get_transform())
+    fig.draw_without_rendering()
     return fig, visible_text_objects
 
 def test_get_text(make_simple_figure):
     result = {text.mpl_text for text in
-              tools.extract_text(make_simple_figure[0])}
+              tools.verbose_extract_text(make_simple_figure[0])}
     expected = make_simple_figure[1]
     assert result == expected
 
@@ -47,6 +51,7 @@ def test_restore_colors(make_simple_figure):
 def text_only_figure():
     fig = plt.Figure(figsize=(10, 6))
     fig.add_artist(plt.Text(0.42, 0.2845, 'text', color='goldenrod'))
+    fig.draw_without_rendering()
     return fig
 
 def test_get_position_in_figure(text_only_figure):
@@ -76,6 +81,7 @@ def figure_with_clipped_text():
     ax.set_yticks([])
     ax.add_artist(plt.Text( 0.7, 0.2, 'text inside axes'))
     ax.add_artist(plt.Text( 1.1, 1.8, 'text outside axes'))
+    fig.draw_without_rendering()
     return fig
 
 def test_is_inside_ax(figure_with_clipped_text):
@@ -87,31 +93,28 @@ def test_is_inside_ax(figure_with_clipped_text):
         expected = expected_by_text[text.text]
         assert result == expected
 
-def _test_ax_assignment(figure_with_clipped_text):
-    expected_type_by_text = {
-        'text inside axes': plt.Axes,
-        'text outside axes': plt.Axes,
-        'text inside but not tied to axes': NoneType,
-        'text outside and not tied to axes': NoneType}
-    for text in tools.extract_text(figure_with_clipped_text):
-        result = text._ax
-        expected_type = expected_type_by_text[text.text]
-        assert isinstance(result, expected_type)
-
 
 @pytest.fixture
 def figure_with_multiple_axes():
     fig, [ax1, ax2] = plt.subplots(1,2)
+    for ax in ax1, ax2:
+        ax.set_xticks([])
+        ax.set_yticks([])
     fig.add_artist(plt.Text(0.5, 0.5, 'figure text'))
     ax1.annotate('ax1 text', (3.14, 6.28))
     ax2.annotate('ax2 text', (0.35, 6.6))
+    handles = [ax1.errorbar([], [], [], label='label')]
+    fig.legend(handles=handles, loc='center')
+    fig.draw_without_rendering()
     return fig
 
 def test_ax_identification(figure_with_multiple_axes):
     expected_by_text = {
         'figure text': None,
         'ax1 text': figure_with_multiple_axes.get_axes()[0],
-        'ax2 text': figure_with_multiple_axes.get_axes()[1]}
+        'ax2 text': figure_with_multiple_axes.get_axes()[1],
+        'label': None
+        }
     for text in tools.extract_text(figure_with_multiple_axes):
         result = text._ax
         expected = expected_by_text[text.text]
