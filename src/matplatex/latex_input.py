@@ -73,9 +73,9 @@ class LaTeXinput:
             rf"%   \setlength{{{self.widthcommand}}}{{<your desired width>}}",
             "%",
             "% Include the figure with",
-            rf"%   \input{{<file name>.pdf_tex}}",
+            rf"%   \input{{<file name>.tex}}",
             "% or using the import package:",
-            rf"%   \import{{<path>}}{{<file name>.pdf_tex}}",
+            rf"%   \import{{<path>}}{{<file name>.tex}}",
             "%",
             "%"
             ])

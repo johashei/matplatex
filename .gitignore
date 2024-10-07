@@ -21,3 +21,5 @@ temp
 *.pdf
 *.pdf_tex
 *.pdf.tex
+
+/tests/bug.py
