@@ -29,8 +29,8 @@ def save(
         filename: str,
         *,
         widthcommand: str = r"\figurewidth",
-        draw_anchors: bool = False,
         externalize: bool = False,
+        draw_anchors: bool = False,
         verbose: int = 1
         ):
     """Save matplotlib Figure with text in a separate tex file.
