@@ -43,6 +43,8 @@ def save(
         The LaTeX length command which will be used to define the width
         of the figure.
     :type widthcommand: str
+    :param externalize: Set to True to use tikz externalization.
+    :type externalize: bool
     :param draw_anchors:
         If True, mark the text anchors on the figure. Useful for debugging.
     :type draw_anchors: bool
