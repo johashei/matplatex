@@ -52,6 +52,7 @@ def save(
                     2: Also print runtime info to stderr.
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
+    figure.set_layout_engine('none') # Don't change the figure after this.
     output = LaTeXinput(widthcommand=widthcommand, externalize=externalize)
     filename_base = filename.rsplit('/')[-1]
     write_tex(
