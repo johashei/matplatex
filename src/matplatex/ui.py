@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 Johannes Sørby Heines
+Copyright (C) 2024 2025 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
