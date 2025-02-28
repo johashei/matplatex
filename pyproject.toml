@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.26.1"]
 build-backend = "hatchling.build"
 
 [project]
@@ -47,19 +47,8 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/matplatex"]
 
-[tool.hatch.envs.test]
-python = "3.10"
-dependencies = [
-	"pytest",
-]
-
-[tool.hatch.envs.edge]
-python = "3.11"
-dependencies = [
-	"seaborn",
-	"pandas",
-	"pytest",
-]
+[[tool.hatch.envs.hatch-text.matrix]]
+python = ['3.10', '3.11', '3.12', '3.13']
 
 [tool.pytest.ini_options]
 addopts = [
@@ -68,6 +57,3 @@ addopts = [
 markers = [
     "select_latex"
 ]
-
-[tool.hatch.envs.test.scripts]
-all = "pytest --verbose tests/"
