@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 Johannes Sørby Heines
+Copyright (C) 2024 2025 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -82,6 +82,14 @@ class FigureText:
         self.mpl_text.set_color(value)
 
     @cached_property
+    def fontsize(self) -> str:
+        mpl_fontsize = self.mpl_text.get_fontsize()
+        for maxsize, latex_size in fontsize_map.items():
+            if mpl_fontsize <= maxsize:
+                return latex_size
+
+
+    @cached_property
     def tikz_anchor(self) -> str:
         anchor_by_va = {
             'bottom': 'south',
@@ -132,6 +140,20 @@ class FigureText:
             return True
         else:
             return False
+
+fontsize_map = {
+    # Keys indicate largest point size for each LaTeX size.
+    # These probably need tweaking
+    4: r'\tiny',
+    6: r'\scriptsize',
+    7: r'\footnotesize',
+    9: r'\small',
+    11: r'\normalsize',
+    13: r'\large',
+    15: r'\Large',
+    18: r'\LARGE',
+    25: r'\huge'
+    }
 
 
 @beartype
