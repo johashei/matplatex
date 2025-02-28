@@ -87,7 +87,6 @@ class LaTeXinput:
         self.addline('')
         if self.externalize:
             self.addline(rf"\beginpgfgraphicnamed{{{graphics_filename}_xt}}")
-            self.addline(r"\newlength{\matplatextmp}")
         self.latexcode += '\n'.join([
             r"\begingroup",
             "",
