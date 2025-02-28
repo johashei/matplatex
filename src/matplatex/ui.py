@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 Johannes Sørby Heines
+Copyright (C) 2024 2025 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ def save(
                     2: Also print runtime info to stderr.
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
+    figure.set_layout_engine('none') # Don't change the figure after this.
     output = LaTeXinput(widthcommand=widthcommand, externalize=externalize)
     filename_base = filename.rsplit('/')[-1]
     write_tex(
