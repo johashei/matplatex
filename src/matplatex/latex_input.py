@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 Johannes Sørby Heines
+Copyright (C) 2024 2025 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ class LaTeXinput:
         self.latexcode += '\n'.join([
             r"\begingroup",
             "",
-            rf"\setlength{{\matplatextmp}}{{{height_to_width}{self.widthcommand}}}",
+            rf"\setlength{{\matplatextmp}}{{{height_to_width:.4f}{self.widthcommand}}}",
             r"\hspace{-\parindent}",
             rf"\begin{{tikzpicture}}[x={self.widthcommand}, y=\matplatextmp]",
             rf"  \node[inner sep=0pt, above right] (graphics) at (0,0) {{",
@@ -104,13 +104,13 @@ class LaTeXinput:
         if len(color)==4:
             alpha = color[3]
         self.addline(rf"  \node [inner sep=0pt, "
-                     rf"text={{rgb,1:red,{color[0]}; "
-                                  rf"green,{color[1]}; "
-                                  rf"blue,{color[2]}}}, "
+                                 rf"text={{rgb,1:red,{color[0]:.3f}; "
+                                           rf"green,{color[1]:.3f}; "
+                                           rf"blue,{color[2]:.3f}}}, "
                      rf"rotate={rotation}, "
                      rf"anchor={anchor}, "
                      rf"opacity={alpha}] "
-                     rf"at ({position[0]}, {position[1]}) "
+                     rf"at ({position[0]:.4f}, {position[1]:.4f}) "
                      rf"{{{text}}};")
 
     def endgraphics(self):
