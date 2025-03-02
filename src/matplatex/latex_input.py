@@ -98,8 +98,17 @@ class LaTeXinput:
             ])
         self.graphic_isopen = True
 
-    def add_text(self, text, position, *,
-                 rotation=0, color=(0, 0, 0), alpha=1, anchor='center'):
+    def add_text(
+            self,
+            text,
+            position,
+            *,
+            rotation=0,
+            color=(0, 0, 0),
+            alpha=1,
+            anchor='center',
+            sizecmd=''
+            ):
         if len(color)==4:
             alpha = color[3]
         self.addline(rf"  \node [inner sep=0pt, "
@@ -110,7 +119,7 @@ class LaTeXinput:
                      rf"anchor={anchor}, "
                      rf"opacity={alpha}] "
                      rf"at ({position[0]:.4f}, {position[1]:.4f}) "
-                     rf"{{{text}}};")
+                     rf"{{{sizecmd} {text}}};")
 
     def endgraphics(self):
         self.addline(r"\end{tikzpicture}")

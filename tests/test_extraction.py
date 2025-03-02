@@ -74,6 +74,23 @@ def test_get_height_to_width(text_only_figure):
     assert result == expected
 
 @pytest.fixture
+def figure_with_sized_text():
+    fig = plt.figure()
+    for i, (maxsize, latex_size) in enumerate(tools.fontsize_map.items()):
+        mpl_size = maxsize
+        fig.add_artist(plt.Text(i, i%3, latex_size, fontsize=mpl_size))
+    return fig
+
+def test_get_size(figure_with_sized_text):
+    size_by_text = {
+        text.text: text.get_fontsize()
+        for text in tools.extract_text(figure_with_sized_text)
+        }
+    expected = list(size_by_text.keys())
+    result = list(size_by_text.values())
+    assert result == expected
+
+@pytest.fixture
 def figure_with_clipped_text():
     fig = plt.figure()
     ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))

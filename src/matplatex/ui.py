@@ -29,6 +29,7 @@ def save(
         filename: str,
         *,
         widthcommand: str = r"\figurewidth",
+        scale_fontsize: float | bool = 1.0,
         draw_anchors: bool = False,
         externalize: bool = False,
         verbose: int = 1
@@ -44,6 +45,10 @@ def save(
     --------------------------
     widthcommand    The LaTeX length command which will be used to
                     define the width of the figure.
+    scale_fontsize  Map the fontsizes in the figure to LaTeX font sizes.
+                    If a float is given, the fontsizes are scaled by
+                    that value before mapping.
+                    If False, no LaTeX font size commands are used.
     draw_anchors    If True, mark the text anchors on the figure.
                     Useful for debugging.
     externalize     Set to True if you want to use tikz externalization.
@@ -52,6 +57,7 @@ def save(
                     2: Also print runtime info to stderr.
     """
     figure.draw_without_rendering() # Must draw text before it can be extracted.
+    layout_engine = figure.get_layout_engine()
     figure.set_layout_engine('none') # Don't change the figure after this.
     output = LaTeXinput(widthcommand=widthcommand, externalize=externalize)
     filename_base = filename.rsplit('/')[-1]
@@ -59,15 +65,18 @@ def save(
         output,
         figure,
         graphics=f'{filename_base}_gfx',
+        scale_fontsize=scale_fontsize,
         add_anchors=draw_anchors,
         verbose=(verbose==2)
         )
     output.write(f"{filename}.tex")
     color_backup = make_all_transparent(figure)
     figure.savefig(f"{filename}_gfx.pdf", format='pdf')
-    restore_colors(figure, color_backup)
     if verbose:
         print(f"Figure written to files {filename}.tex and {filename}_gfx.pdf")
+    # restore figure
+    restore_colors(figure, color_backup)
+    figure.set_layout_engine(layout_engine)
 
 
 def print_family_tree(mpl_object):
