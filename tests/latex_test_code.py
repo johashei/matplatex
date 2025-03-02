@@ -23,6 +23,7 @@ TIKZEXTERNALIZE = r"""
 \pgfrealjobname{document}
 
 \newlength{\figurewidth}
+\newlength{\matplatextmp}
 
 \begin{document}
 

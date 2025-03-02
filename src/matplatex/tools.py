@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 Johannes Sørby Heines
+Copyright (C) 2024 2025 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,18 +29,24 @@ from .latex_input import LaTeXinput
 
 def write_tex(
         output: LaTeXinput, fig, *,
-        graphics, add_anchors=False, verbose=False
+        graphics, scale_fontsize=False, add_anchors=False, verbose=False
         ):
     output.includegraphics(graphics, get_height_to_width(fig))
     for element in extract_text(fig, verbose):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
+        if scale_fontsize:
+            sizecmd = element.get_fontsize(scale=scale_fontsize)
+        else:
+            sizecmd = ''
         output.add_text(
             element.text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
             rotation=element.rotation,
-            color=element.color)
+            color=element.color,
+            sizecmd=sizecmd
+            )
 
 class FigureText:
     """Contain text and its tikz properties."""
@@ -110,6 +116,12 @@ class FigureText:
         else:
             return self._is_inside_ax()
 
+    def get_fontsize(self, scale=1.0) -> str:
+        mpl_fontsize = scale*self.mpl_text.get_fontsize()
+        for maxsize, latex_size in fontsize_map.items():
+            if mpl_fontsize <= maxsize:
+                return latex_size
+
     @cached_property
     def _display_xy(self):
         return self.mpl_text.get_transform().transform(
@@ -132,6 +144,20 @@ class FigureText:
             return True
         else:
             return False
+
+fontsize_map = {
+    # Keys indicate largest point size for each LaTeX size.
+    # These probably need tweaking
+    4: r'\tiny',
+    6: r'\scriptsize',
+    7: r'\footnotesize',
+    9: r'\small',
+    11: r'\normalsize',
+    13: r'\large',
+    15: r'\Large',
+    18: r'\LARGE',
+    25: r'\huge'
+    }
 
 
 @beartype
