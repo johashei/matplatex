@@ -83,7 +83,7 @@ def figure_with_sized_text():
 
 def test_get_size(figure_with_sized_text):
     size_by_text = {
-        text.text: text.fontsize
+        text.text: text.get_fontsize()
         for text in tools.extract_text(figure_with_sized_text)
         }
     expected = list(size_by_text.keys())

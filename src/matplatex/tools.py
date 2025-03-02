@@ -29,18 +29,24 @@ from .latex_input import LaTeXinput
 
 def write_tex(
         output: LaTeXinput, fig, *,
-        graphics, add_anchors=False, verbose=False
+        graphics, scale_fontsize=False, add_anchors=False, verbose=False
         ):
     output.includegraphics(graphics, get_height_to_width(fig))
     for element in extract_text(fig, verbose):
         if add_anchors:  # useful for checking positioning
             draw_anchors(fig, element.position_in_figure)
+        if scale_fontsize:
+            sizecmd = element.get_fontsize(scale=scale_fontsize)
+        else:
+            sizecmd = ''
         output.add_text(
             element.text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
             rotation=element.rotation,
-            color=element.color)
+            color=element.color,
+            sizecmd=sizecmd
+            )
 
 class FigureText:
     """Contain text and its tikz properties."""
@@ -82,14 +88,6 @@ class FigureText:
         self.mpl_text.set_color(value)
 
     @cached_property
-    def fontsize(self) -> str:
-        mpl_fontsize = self.mpl_text.get_fontsize()
-        for maxsize, latex_size in fontsize_map.items():
-            if mpl_fontsize <= maxsize:
-                return latex_size
-
-
-    @cached_property
     def tikz_anchor(self) -> str:
         anchor_by_va = {
             'bottom': 'south',
@@ -117,6 +115,12 @@ class FigureText:
             return True
         else:
             return self._is_inside_ax()
+
+    def get_fontsize(self, scale=1.0) -> str:
+        mpl_fontsize = scale*self.mpl_text.get_fontsize()
+        for maxsize, latex_size in fontsize_map.items():
+            if mpl_fontsize <= maxsize:
+                return latex_size
 
     @cached_property
     def _display_xy(self):
