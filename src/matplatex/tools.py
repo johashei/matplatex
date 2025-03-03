@@ -26,6 +26,7 @@ from matplotlib.colors import to_rgba
 from beartype import beartype
 
 from .latex_input import LaTeXinput
+from .settings import fontsize_map
 
 def write_tex(
         output: LaTeXinput, fig, *,
@@ -144,20 +145,6 @@ class FigureText:
             return True
         else:
             return False
-
-fontsize_map = {
-    # Keys indicate largest point size for each LaTeX size.
-    # These probably need tweaking
-    4: r'\tiny',
-    6: r'\scriptsize',
-    7: r'\footnotesize',
-    9: r'\small',
-    11: r'\normalsize',
-    13: r'\large',
-    15: r'\Large',
-    18: r'\LARGE',
-    25: r'\huge'
-    }
 
 
 @beartype
