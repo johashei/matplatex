@@ -119,7 +119,7 @@ class FigureText:
 
     def get_fontsize(self, scale=1.0) -> str:
         mpl_fontsize = scale*self.mpl_text.get_fontsize()
-        for maxsize, latex_size in fontsize_map.items():
+        for latex_size, maxsize in fontsize_map.items():
             if mpl_fontsize <= maxsize:
                 return latex_size
 

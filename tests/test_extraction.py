@@ -76,7 +76,7 @@ def test_get_height_to_width(text_only_figure):
 @pytest.fixture
 def figure_with_sized_text():
     fig = plt.figure()
-    for i, (maxsize, latex_size) in enumerate(tools.fontsize_map.items()):
+    for i, (latex_size, maxsize) in enumerate(tools.fontsize_map.items()):
         mpl_size = maxsize
         fig.add_artist(plt.Text(i, i%3, latex_size, fontsize=mpl_size))
     return fig

@@ -18,15 +18,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 fontsize_map = {
-    # Keys indicate largest point size for each LaTeX size.
+    # Values indicate largest point size for each LaTeX size.
     # These probably need tweaking
-    4: r'\tiny',
-    6: r'\scriptsize',
-    7: r'\footnotesize',
-    9: r'\small',
-    11: r'\normalsize',
-    13: r'\large',
-    15: r'\Large',
-    18: r'\LARGE',
-    25: r'\huge'
+    r'\tiny': 4,
+    r'\scriptsize': 6,
+    r'\footnotesize': 7,
+    r'\small': 9,
+    r'\normalsize': 11,
+    r'\large': 13,
+    r'\Large': 15,
+    r'\LARGE': 18,
+    r'\huge': 25
     }
