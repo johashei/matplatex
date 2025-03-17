@@ -91,7 +91,7 @@ class LaTeXinput:
             r"\begingroup",
             "",
             rf"\setlength{{\matplatextmp}}{{{height_to_width:.4f}{self.widthcommand}}}",
-            r"\hspace{-\parindent}",
+            r"\hspace{-\parindent}%",
             rf"\begin{{tikzpicture}}[x={self.widthcommand}, y=\matplatextmp]",
             rf"  \node[inner sep=0pt, above right] (graphics) at (0,0) {{",
             rf"    \includegraphics[width={self.widthcommand}]{{{graphics_filename}}}}};",
