@@ -28,6 +28,7 @@ def save(
         figure: plt.Figure,
         filename: str,
         *,
+        format: str = 'pdf',
         widthcommand: str = r"\figurewidth",
         scale_fontsize: float | bool = 1.0,
         draw_anchors: bool = False,
@@ -43,6 +44,7 @@ def save(
 
     Optional keyword arguments
     --------------------------
+    format          The format in which to save the no-text figure.
     widthcommand    The LaTeX length command which will be used to
                     define the width of the figure.
     scale_fontsize  Map the fontsizes in the figure to LaTeX font sizes.
@@ -71,9 +73,9 @@ def save(
         )
     output.write(f"{filename}.tex")
     color_backup = make_all_transparent(figure)
-    figure.savefig(f"{filename}_gfx.pdf", format='pdf')
+    figure.savefig(f"{filename}_gfx.{format}", format=format)
     if verbose:
-        print(f"Figure written to files {filename}.tex and {filename}_gfx.pdf")
+        print(f"Figure written to files {filename}.tex and {filename}_gfx.{format}")
     # restore figure
     restore_colors(figure, color_backup)
     figure.set_layout_engine(layout_engine)
