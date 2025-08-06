@@ -66,7 +66,7 @@ def save(
     write_tex(
         output,
         figure,
-        graphics=f'{filename_base}_gfx',
+        graphics=f'{filename_base}_gfx.{format}',  # in case multiple formats exist
         scale_fontsize=scale_fontsize,
         add_anchors=draw_anchors,
         verbose=(verbose==2)

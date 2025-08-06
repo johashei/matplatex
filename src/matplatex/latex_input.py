@@ -1,4 +1,4 @@
-"""matplatex: export matplotlib figures as pdf and text separately for
+"""matplatex: export matplotlib figures as image and text separately for
 use in LaTeX.
 
 Copyright (C) 2024 2025 Johannes Sørby Heines
