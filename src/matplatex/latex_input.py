@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as image and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 2025 Johannes Sørby Heines
+Copyright (C) 2024–2026 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from pathlib import Path
 import sys
 
 from .__about__ import __version__
@@ -80,13 +81,13 @@ class LaTeXinput:
             "%"
             ])
 
-    def includegraphics(self, graphics_filename, height_to_width: float):
+    def includegraphics(self, graphics_filename: Path, height_to_width: float):
         """ Start a tikzpicture and include the graphics."""
         if self.graphic_isopen:
             self.endgraphics()
         self.addline('')
         if self.externalize:
-            self.addline(rf"\beginpgfgraphicnamed{{{graphics_filename}_xt}}")
+            self.addline(rf"\beginpgfgraphicnamed{{{graphics_filename.stem}_xt}}")
         self.latexcode += '\n'.join([
             r"\begingroup",
             "",

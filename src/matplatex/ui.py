@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from pathlib import Path
 
 from beartype import beartype
 import matplotlib.pyplot as plt
@@ -26,7 +27,7 @@ from .latex_input import LaTeXinput
 @beartype
 def save(
         figure: plt.Figure,
-        filename: str,
+        filename: str | Path,
         *,
         format: str = 'pdf',
         widthcommand: str = r"\figurewidth",
@@ -40,7 +41,10 @@ def save(
     Arguments
     ---------
     figure      The matplotlib Figure to save
-    filename    The name to use for the files, without extention
+    filename    The name to use for the files, without extention. This
+                will create the files:
+                - <filename>.tex
+                - <filename>.gfx.<format>
 
     Optional keyword arguments
     --------------------------
@@ -58,24 +62,27 @@ def save(
                     1: Print save message to stdout. (default)
                     2: Also print runtime info to stderr.
     """
+    filepath = Path(filename)
+    graphics_path = filepath.with_name(f'{filepath.name}.gfx.{format}')
+    latex_path = filepath.with_name(f'{filepath.name}.tex')
+
     figure.draw_without_rendering() # Must draw text before it can be extracted.
     layout_engine = figure.get_layout_engine()
     figure.set_layout_engine('none') # Don't change the figure after this.
     output = LaTeXinput(widthcommand=widthcommand, externalize=externalize)
-    filename_base = filename.rsplit('/')[-1]
     write_tex(
         output,
         figure,
-        graphics=f'{filename_base}_gfx.{format}',  # in case multiple formats exist
+        graphics=graphics_path.relative_to(filepath.parent),
         scale_fontsize=scale_fontsize,
         add_anchors=draw_anchors,
         verbose=(verbose==2)
         )
-    output.write(f"{filename}.tex")
+    output.write(latex_path)
     color_backup = make_all_transparent(figure)
-    figure.savefig(f"{filename}_gfx.{format}", format=format)
+    figure.savefig(graphics_path, format=format)
     if verbose:
-        print(f"Figure written to files {filename}.tex and {filename}_gfx.{format}")
+        print(f"Figure written to files {latex_path} and {graphics_path}")
     # restore figure
     restore_colors(figure, color_backup)
     figure.set_layout_engine(layout_engine)

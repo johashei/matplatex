@@ -1,2 +1,3 @@
-from .ui import * # Import the functions the user needs.
-from .journal_settings import * # So these classes can be imported directly
+# Import the functions and classes the user needs.
+from .ui import save, print_family_tree
+from .journal_settings import EPJ, PRC, Beamer
