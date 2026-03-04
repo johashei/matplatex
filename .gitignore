@@ -4,6 +4,7 @@
 token
 /env
 /dist
+/examples
 
 *.ipynb
 .ipynb_checkpoints
