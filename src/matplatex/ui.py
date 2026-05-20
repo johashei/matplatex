@@ -31,7 +31,7 @@ def save(
         *,
         format: str = 'pdf',
         widthcommand: str = r"\figurewidth",
-        scale_fontsize: float | bool = 1.0,
+        scale_fontsize: float | bool = False,
         draw_anchors: bool = False,
         externalize: bool = False,
         verbose: int = 1
