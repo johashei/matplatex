@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 2025 Johannes Sørby Heines
+Copyright (C) 2024–2026 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from dataclasses import dataclass
+
 fontsize_map = {
     # Values indicate largest point size for each LaTeX size.
     # These probably need tweaking
@@ -30,3 +32,13 @@ fontsize_map = {
     r'\LARGE': 18,
     r'\huge': 25
     }
+
+@dataclass
+class Replacements:
+    math_mode = {
+        '\N{MINUS SIGN}': '-', # minus in tex math mode
+        r'\mathdefault': '', # used by matplotlib in latex mode
+        }
+    text_mode = {
+        '\N{MINUS SIGN}': r'--\,'  # minus sing in text mode, could use textcomp?
+        }

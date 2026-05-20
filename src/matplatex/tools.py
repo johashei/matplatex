@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as image and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 2025 Johannes Sørby Heines
+Copyright (C) 2024–2026 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ from matplotlib.colors import to_rgba
 from beartype import beartype
 
 from .latex_input import LaTeXinput
-from .settings import fontsize_map
+from .settings import fontsize_map, Replacements
 
 def write_tex(
         output: LaTeXinput, fig, *,
@@ -40,8 +40,12 @@ def write_tex(
             sizecmd = element.get_fontsize(scale=scale_fontsize)
         else:
             sizecmd = ''
+        if element.usetex:
+            text = replace_multiple(element.text, Replacements.math_mode)
+        else:
+            text = replace_multiple(element.text, Replacements.text_mode)
         output.add_text(
-            element.text,
+            text,
             position=element.position_in_figure,
             anchor=element.tikz_anchor,
             rotation=element.rotation,
@@ -117,6 +121,10 @@ class FigureText:
         else:
             return self._is_inside_ax()
 
+    @property
+    def usetex(self) -> bool:
+        return self.mpl_text.get_usetex()
+
     def get_fontsize(self, scale=1.0) -> str:
         mpl_fontsize = scale*self.mpl_text.get_fontsize()
         for latex_size, maxsize in fontsize_map.items():
@@ -145,7 +153,6 @@ class FigureText:
             return True
         else:
             return False
-
 
 @beartype
 def extract_text(fig: plt.Figure, /, verbose: bool = False) -> set[FigureText]:
@@ -228,3 +235,8 @@ def draw_anchors(fig, figure_xy):
     ax = fig.get_children()[1]
     ax.plot(figure_xy[0], figure_xy[1], '+r', clip_on=False,
             transform=fig.transFigure, zorder=20)
+
+def replace_multiple(string: str, replacements: dict) -> str:
+    for key, val in replacements.items():
+        string = string.replace(key, val)
+    return string

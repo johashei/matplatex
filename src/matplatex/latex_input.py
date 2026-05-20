@@ -21,7 +21,6 @@ from pathlib import Path
 import sys
 
 from .__about__ import __version__
-from .string_replacements import invalid_latex
 
 
 class LaTeXinput:
@@ -135,9 +134,6 @@ class LaTeXinput:
     def write(self, filename):
         if self.graphic_isopen:
             self.endgraphics()
-#        self.addline(rf"\global\let{self.widthcommand}\undefined%")
-#        self.latexcode.replace('  ', '\t')
-        self.latexcode = replace_multiple(self.latexcode, invalid_latex)
         with open(filename, 'w') as outfile:
             outfile.write(self.latexcode)
 
@@ -145,11 +141,6 @@ class LaTeXinput:
 def as_latex_command(string: str, /):
     """Make sure the string begins with exactly one backslash."""
     return '\\' + string.strip('\\')
-
-def replace_multiple(string: str, replacements: dict) -> str:
-    for key, val in replacements.items():
-        string = string.replace(key, val)
-    return string
 
 def trim(string):
     """Trim a multiline string.
