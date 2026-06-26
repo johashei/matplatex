@@ -111,6 +111,10 @@ class LaTeXinput:
             ):
         if len(color)==4:
             alpha = color[3]
+        if sizecmd:
+            cmddelim = ' '
+        else:
+            cmddelim = ''
         self.addline(rf"  \node [inner sep=0pt, "
                                  rf"text={{rgb,1:red,{color[0]:.3f}; "
                                            rf"green,{color[1]:.3f}; "
@@ -119,7 +123,7 @@ class LaTeXinput:
                      rf"anchor={anchor}, "
                      rf"opacity={alpha}] "
                      rf"at ({position[0]:.4f}, {position[1]:.4f}) "
-                     rf"{{{sizecmd} {text}}};")
+                     rf"{{{sizecmd}{cmddelim}{text}}};")
 
     def endgraphics(self):
         self.addline(r"\end{tikzpicture}")
