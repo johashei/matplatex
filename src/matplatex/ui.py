@@ -34,6 +34,7 @@ def save(
         scale_fontsize: float | bool = False,
         draw_anchors: bool = False,
         externalize: bool = False,
+        trim: bool = False,
         verbose: int = 1
         ):
     """Save matplotlib Figure with text in a separate tex file.
@@ -57,7 +58,10 @@ def save(
                     If False, no LaTeX font size commands are used.
     draw_anchors    If True, mark the text anchors on the figure.
                     Useful for debugging.
-    externalize     Set to True if you want to use tikz externalization.
+    externalize     Set to True if you want to use manual tikz
+                    externalization.
+    trim            Trim LaTeX bounding box to figure size, ignore
+                    overflowing text.
     verbose: int    0: Print nothing.
                     1: Print save message to stdout. (default)
                     2: Also print runtime info to stderr.
@@ -69,7 +73,11 @@ def save(
     figure.draw_without_rendering() # Must draw text before it can be extracted.
     layout_engine = figure.get_layout_engine()
     figure.set_layout_engine('none') # Don't change the figure after this.
-    output = LaTeXinput(widthcommand=widthcommand, externalize=externalize)
+    output = LaTeXinput(
+        widthcommand=widthcommand,
+        externalize=externalize,
+        trim=trim
+        )
     write_tex(
         output,
         figure,
