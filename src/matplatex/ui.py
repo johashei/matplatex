@@ -1,7 +1,7 @@
 """matplatex: export matplotlib figures as pdf and text separately for
 use in LaTeX.
 
-Copyright (C) 2024 2025 Johannes Sørby Heines
+Copyright (C) 2024–2026 Johannes Sørby Heines
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -94,6 +94,8 @@ def save(
     # restore figure
     restore_colors(figure, color_backup)
     figure.set_layout_engine(layout_engine)
+
+    return graphics_path  # so output can be used directly in cmyk conversion
 
 
 def print_family_tree(mpl_object):
