@@ -34,7 +34,7 @@ In your LaTeX preamble, add the following
 and include the figure as such:
 ```
 \setlength{\figurewidth}{<your desired width>}
-\input{myfig.pdf_tex}
+\input{myfig.gfx.tex}
 ```
 LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expected way.
 
