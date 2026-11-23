@@ -21,6 +21,7 @@ jobs:
           python3 -m
           pip install
           hatch
+          build
           --user
       - name: Build a wheel and a source distribution
         run: python3 -m build
