@@ -37,34 +37,37 @@ def save(
         trim: bool = False,
         verbose: int = 1
         ):
-    """Save matplotlib Figure with text in a separate tex file.
+    r"""Save matplotlib Figure with text in a separate tex file.
 
     Arguments
     ---------
-    figure      The matplotlib Figure to save
-    filename    The name to use for the files, without extention. This
-                will create the files:
-                - <filename>.tex
-                - <filename>.gfx.<format>
+    figure : matplotlib figure
+        The matplotlib Figure to save
+    filename : str or path
+        The name to use for the files, without extention. This will
+        create the files: `<filename>.tex` and `<filename>.gfx.<format>`
 
     Optional keyword arguments
     --------------------------
-    format          The format in which to save the no-text figure.
-    widthcommand    The LaTeX length command which will be used to
-                    define the width of the figure.
-    scale_fontsize  Map the fontsizes in the figure to LaTeX font sizes.
-                    If a float is given, the fontsizes are scaled by
-                    that value before mapping.
-                    If False, no LaTeX font size commands are used.
-    draw_anchors    If True, mark the text anchors on the figure.
-                    Useful for debugging.
-    externalize     Set to True if you want to use manual tikz
-                    externalization.
-    trim            Trim LaTeX bounding box to figure size, ignore
-                    overflowing text.
-    verbose: int    0: Print nothing.
-                    1: Print save message to stdout. (default)
-                    2: Also print runtime info to stderr.
+    format : str, default 'pdf'
+        The format in which to save the no-text figure.
+    widthcommand : str, default r'\figurewidth'
+        The LaTeX length command which will be used to define the width
+        of the figure.
+    scale_fontsize : bool or float, default False
+        Map the fontsizes in the figure to LaTeX font sizes. If a float
+        is given, the fontsizes are scaled by that value before mapping.
+        If False, no LaTeX font size commands are used.
+    draw_anchors : bool, default False
+        If True, mark the text anchors on the figure. Useful for debugging.
+    externalize : bool, default False
+        Set to True if you want to use manual tikz externalization.
+    trim : bool, default False
+        Trim LaTeX bounding box to figure size, ignore overflowing text.
+    verbose : {0, 1, 2}
+        0: Print nothing.
+        1: Print save message to stdout. (default)
+        2: Also print runtime info to stderr.
     """
     filepath = Path(filename)
     graphics_path = filepath.with_name(f'{filepath.name}.gfx.{format}')

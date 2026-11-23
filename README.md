@@ -26,26 +26,19 @@ matplatex.save(fig, "myfig")
 ```
 this will create two files named `myfig.pdf` and `myfig.pdf_tex`.
 
-In your LaTeX document, define the width of the figure with
+In your LaTeX preamble, add the following
 ```
 \newlength{\figurewidth}
-\setlength{\figurewidth}{<your desired width>}
+\newlength{\matplatextmp}
 ```
 and include the figure as such:
 ```
+\setlength{\figurewidth}{<your desired width>}
 \input{myfig.pdf_tex}
 ```
 LaTeX commands such as `\small` and `\textbf{}` will affect the text in the expected way.
 
 ## Options
 
-_Note: this is still under development and may change in future versions._
-
-`matplatex.save` accepts the following keyword options:
-- `widthcommand`: string  
-Command used to set the width of the figure. Default: `\figurewidth`.
-- `draw_anchors`: bool  
-Mark the text anchors in the figure. Useful for debugging. Default: `False`.
-- `verbose`: bool  
-Print message upon successful save. Default: `True`.
-
+See the docstring of `matplatex.save()` for information on optional arguments.
+A proper documentation is coming eventually.
